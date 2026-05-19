@@ -195,3 +195,12 @@ scripts/output/
 *.pem
 *.key
 *.crt
+
+# Capacitor
+android/
+ios/
+
+# Build outputs
+*.apk
+*.ipa
+*.aab

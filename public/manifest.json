@@ -1,0 +1,31 @@
+{
+  "name": "Yinxin.AGI",
+  "short_name": "Yinxin",
+  "description": "你的任务，交给Yinxin搞定",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#10b981",
+  "icons": [
+    {
+      "src": "/agent-icon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    },
+    {
+      "src": "/agent-icon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/agent-icon.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "/agent-icon.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    }
+  ]
+}
