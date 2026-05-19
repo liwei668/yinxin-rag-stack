@@ -1,0 +1,21 @@
+{"timestamp":"2026-04-28T14:37:03.607Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"info","status":"running","message":"🚀 任务开始执行（多轮推理模式）"}
+{"timestamp":"2026-04-28T14:37:14.710Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"info","status":"running","message":"📋 执行预规划步骤 1/2"}
+{"timestamp":"2026-04-28T14:37:14.793Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"info","status":"running","message":"⚡ 步骤 1: 打开百度首页"}
+{"timestamp":"2026-04-28T14:37:25.270Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"success","status":"running","message":"✅ 已打开: 百度一下，你就知道 (5853ms)"}
+{"timestamp":"2026-04-28T14:37:29.647Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"info","status":"running","message":"📋 执行预规划步骤 2/2"}
+{"timestamp":"2026-04-28T14:37:29.647Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"info","status":"running","message":"⚡ 步骤 2: 输入搜索关键词"}
+{"timestamp":"2026-04-28T14:37:37.460Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"success","status":"running","message":"✅ 已输入 \"最新新闻\" (4195ms)"}
+{"timestamp":"2026-04-28T14:37:39.947Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"info","status":"running","message":"✅ 所有预规划步骤已完成，进入实时决策模式"}
+{"timestamp":"2026-04-28T14:37:43.153Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"info","status":"running","message":"⚡ 步骤 3: 用户在百度首页输入了关键词，现点击搜索按钮提交搜索请求"}
+{"timestamp":"2026-04-28T14:37:54.561Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"warn","status":"running","message":"[重试 第1次] 用户在百度首页输入了关键词，现点击搜索按钮提交搜索请求 - 策略: 等待后重试"}
+{"timestamp":"2026-04-28T14:38:07.952Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"warn","status":"running","message":"[重试 第2次] 用户在百度首页输入了关键词，现点击搜索按钮提交搜索请求 - 策略: 更换选择器（模糊匹配）"}
+{"timestamp":"2026-04-28T14:38:20.839Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"warn","status":"running","message":"[重试 第3次] 用户在百度首页输入了关键词，现点击搜索按钮提交搜索请求 - 策略: 更换选择器（精确文本截断）"}
+{"timestamp":"2026-04-28T14:38:33.851Z","taskId":"d7a55328-c16b-433f-911b-16ffb67bd037","action":"error","status":"running","message":"[重试失败] 步骤 \"用户在百度首页输入了关键词，现点击搜索按钮提交搜索请求\" 连续 3 次重试均失败，暂停任务。错误: 未找到元素: \"百度一下\""}
+{"timestamp":"2026-04-28T15:09:17.674Z","taskId":"4d886a79-98ac-404a-b483-40b439179668","action":"info","status":"running","message":"🚀 任务开始执行（多轮推理模式）"}
+{"timestamp":"2026-04-28T15:09:26.858Z","taskId":"4d886a79-98ac-404a-b483-40b439179668","action":"info","status":"running","message":"📋 执行预规划步骤 1/1"}
+{"timestamp":"2026-04-28T15:09:26.948Z","taskId":"4d886a79-98ac-404a-b483-40b439179668","action":"info","status":"running","message":"⚡ 步骤 1: 打开微信网页版"}
+{"timestamp":"2026-04-28T15:09:55.785Z","taskId":"4d886a79-98ac-404a-b483-40b439179668","action":"success","status":"running","message":"✅ 已打开: 微信网页版 (24636ms)"}
+{"timestamp":"2026-04-28T15:10:00.939Z","taskId":"4d886a79-98ac-404a-b483-40b439179668","action":"info","status":"running","message":"✅ 所有预规划步骤已完成，进入实时决策模式"}
+{"timestamp":"2026-04-28T15:10:04.123Z","taskId":"4d886a79-98ac-404a-b483-40b439179668","action":"info","status":"running","message":"⚡ 步骤 2: 确认微信网页版页面是否成功加载，获取页面实际内容以验证状态"}
+{"timestamp":"2026-04-28T15:10:08.908Z","taskId":"4d886a79-98ac-404a-b483-40b439179668","action":"success","status":"running","message":"✅ 已读取页面内容 (64 字符) (360ms)"}
+{"timestamp":"2026-04-28T15:10:16.750Z","taskId":"4d886a79-98ac-404a-b483-40b439179668","action":"warn","status":"waiting_human","message":"❓ 需要用户操作: 页面已加载微信网页版，但显示内容较短，通常需要扫描二维码登录。请查看截图并扫码登录。"}

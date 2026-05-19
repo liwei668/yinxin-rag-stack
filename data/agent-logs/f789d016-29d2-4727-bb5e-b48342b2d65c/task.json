@@ -1,0 +1,125 @@
+{
+  "id": "f789d016-29d2-4727-bb5e-b48342b2d65c",
+  "userId": "admin_liwei",
+  "title": "帮我搜索AI智能体",
+  "description": "帮我搜索AI智能体",
+  "status": "completed",
+  "plan": [
+    {
+      "id": "a19738a5-7967-4e29-958a-682c642b104a",
+      "index": 0,
+      "title": "分析任务需求",
+      "description": "分析任务: 帮我搜索AI智能体",
+      "status": "completed",
+      "riskLevel": "safe",
+      "toolName": "knowledge_query",
+      "toolParams": {
+        "query": "帮我搜索AI智能体"
+      },
+      "startedAt": "2026-04-20T13:02:56.196Z",
+      "duration": 1,
+      "result": [],
+      "completedAt": "2026-04-20T13:02:56.197Z"
+    },
+    {
+      "id": "d2fe1b5f-e08c-4305-817a-da61831a94d9",
+      "index": 1,
+      "title": "执行主要操作",
+      "description": "执行任务的核心操作",
+      "status": "completed",
+      "riskLevel": "safe",
+      "toolName": "browser_navigate",
+      "toolParams": {
+        "url": "https://www.example.com"
+      },
+      "startedAt": "2026-04-20T13:02:56.198Z",
+      "duration": 0,
+      "result": {
+        "url": "https://www.example.com"
+      },
+      "completedAt": "2026-04-20T13:02:56.198Z"
+    },
+    {
+      "id": "00db53b7-38e8-4e06-baa7-de53ea2abcb8",
+      "index": 2,
+      "title": "生成结果",
+      "description": "整理执行结果并返回",
+      "status": "completed",
+      "riskLevel": "safe",
+      "toolName": "generate_document",
+      "toolParams": {
+        "title": "帮我搜索AI智能体",
+        "content": "任务执行结果"
+      },
+      "startedAt": "2026-04-20T13:02:56.199Z",
+      "duration": 0,
+      "result": {
+        "filePath": "/data/docs/帮我搜索AI智能体.undefined"
+      },
+      "completedAt": "2026-04-20T13:02:56.199Z"
+    }
+  ],
+  "currentStepIndex": 2,
+  "createdAt": "2026-04-20T13:02:31.795Z",
+  "screenshots": [],
+  "logs": [
+    {
+      "timestamp": "2026-04-20T13:02:31.798Z",
+      "level": "info",
+      "message": "AI 正在规划执行步骤..."
+    },
+    {
+      "timestamp": "2026-04-20T13:02:33.937Z",
+      "level": "success",
+      "message": "已生成 3 个执行步骤"
+    },
+    {
+      "timestamp": "2026-04-20T13:02:56.123Z",
+      "level": "info",
+      "message": "任务开始执行"
+    },
+    {
+      "timestamp": "2026-04-20T13:02:56.196Z",
+      "level": "info",
+      "message": "执行步骤 1/3: 分析任务需求"
+    },
+    {
+      "timestamp": "2026-04-20T13:02:56.197Z",
+      "level": "success",
+      "message": "已查询知识库: 帮我搜索AI智能体"
+    },
+    {
+      "timestamp": "2026-04-20T13:02:56.198Z",
+      "level": "info",
+      "message": "执行步骤 2/3: 执行主要操作"
+    },
+    {
+      "timestamp": "2026-04-20T13:02:56.198Z",
+      "level": "success",
+      "message": "已导航到 https://www.example.com"
+    },
+    {
+      "timestamp": "2026-04-20T13:02:56.199Z",
+      "level": "info",
+      "message": "执行步骤 3/3: 生成结果"
+    },
+    {
+      "timestamp": "2026-04-20T13:02:56.199Z",
+      "level": "success",
+      "message": "已生成undefined文档: 帮我搜索AI智能体"
+    },
+    {
+      "timestamp": "2026-04-20T13:02:56.199Z",
+      "level": "success",
+      "message": "完成 3/3 个步骤"
+    }
+  ],
+  "metadata": {},
+  "startedAt": "2026-04-20T13:02:56.123Z",
+  "completedAt": "2026-04-20T13:02:56.199Z",
+  "result": {
+    "success": true,
+    "summary": "完成 3/3 个步骤",
+    "screenshots": []
+  }
+}

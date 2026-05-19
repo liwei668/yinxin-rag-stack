@@ -1,0 +1,21 @@
+{"timestamp":"2026-05-02T15:43:21.805Z","taskId":"40a3abd0-b560-4608-bf90-6dce7b643a92","action":"info","status":"planning","message":"🧠 AI 正在理解需求并分析操作步骤..."}
+{"timestamp":"2026-05-02T15:43:26.047Z","taskId":"40a3abd0-b560-4608-bf90-6dce7b643a92","action":"success","status":"pending_approval","message":"📋 已分析出 1 个步骤，自动开始执行"}
+{"timestamp":"2026-05-02T15:43:27.570Z","taskId":"40a3abd0-b560-4608-bf90-6dce7b643a92","action":"info","status":"running","message":"🚀 任务开始执行（多轮推理模式）"}
+{"timestamp":"2026-05-02T15:43:30.083Z","taskId":"40a3abd0-b560-4608-bf90-6dce7b643a92","action":"info","status":"running","message":"📋 执行预规划步骤 1/1"}
+{"timestamp":"2026-05-02T15:43:30.101Z","taskId":"40a3abd0-b560-4608-bf90-6dce7b643a92","action":"info","status":"running","message":"⚡ 步骤 1: goto: 用户需求为打开百度，直接导航到百度首页"}
+{"timestamp":"2026-05-02T15:43:37.431Z","taskId":"40a3abd0-b560-4608-bf90-6dce7b643a92","action":"success","status":"running","message":"✅ 已打开: 百度一下，你就知道 (5857ms)"}
+{"timestamp":"2026-05-02T15:43:39.023Z","taskId":"40a3abd0-b560-4608-bf90-6dce7b643a92","action":"info","status":"running","message":"✅ 所有预规划步骤已完成，进入实时决策模式"}
+{"timestamp":"2026-05-02T15:43:45.640Z","taskId":"40a3abd0-b560-4608-bf90-6dce7b643a92","action":"success","status":"completed","message":"✅ 已成功打开百度首页，页面标题：百度一下，你就知道"}
+{"timestamp":"2026-05-02T15:44:14.276Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"info","status":"running","message":"🚀 任务开始执行（多轮推理模式）"}
+{"timestamp":"2026-05-02T15:44:16.431Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"info","status":"running","message":"📋 执行预规划步骤 1/2"}
+{"timestamp":"2026-05-02T15:44:16.439Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"info","status":"running","message":"⚡ 步骤 1: 打开百度首页"}
+{"timestamp":"2026-05-02T15:44:24.630Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"success","status":"running","message":"✅ 已打开: 百度一下，你就知道 (6707ms)"}
+{"timestamp":"2026-05-02T15:44:26.395Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"info","status":"running","message":"📋 执行预规划步骤 2/2"}
+{"timestamp":"2026-05-02T15:44:26.395Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"info","status":"running","message":"⚡ 步骤 2: 输入搜索关键词"}
+{"timestamp":"2026-05-02T15:44:32.056Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"success","status":"running","message":"✅ 已输入 \"今天成都天气\" (4123ms)"}
+{"timestamp":"2026-05-02T15:44:33.597Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"info","status":"running","message":"✅ 所有预规划步骤已完成，进入实时决策模式"}
+{"timestamp":"2026-05-02T15:44:36.116Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"info","status":"running","message":"⚡ 步骤 3: 已在百度搜索框输入关键词，点击百度一下按钮提交搜索，获取成都天气信息"}
+{"timestamp":"2026-05-02T15:44:46.749Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"warn","status":"running","message":"[重试 第1次] 已在百度搜索框输入关键词，点击百度一下按钮提交搜索，获取成都天气信息 - 策略: 等待后重试"}
+{"timestamp":"2026-05-02T15:44:59.274Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"warn","status":"running","message":"[重试 第2次] 已在百度搜索框输入关键词，点击百度一下按钮提交搜索，获取成都天气信息 - 策略: 更换选择器（模糊匹配）"}
+{"timestamp":"2026-05-02T15:45:10.829Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"warn","status":"running","message":"[重试 第3次] 已在百度搜索框输入关键词，点击百度一下按钮提交搜索，获取成都天气信息 - 策略: 更换选择器（精确文本截断）"}
+{"timestamp":"2026-05-02T15:45:22.858Z","taskId":"65d78f5a-3401-4add-87dd-9caea423714c","action":"error","status":"running","message":"[重试失败] 步骤 \"已在百度搜索框输入关键词，点击百度一下按钮提交搜索，获取成都天气信息\" 连续 3 次重试均失败，暂停任务。错误: 未找到元素: \"百度一下\""}

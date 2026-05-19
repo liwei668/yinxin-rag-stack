@@ -1,0 +1,74 @@
+[
+  {
+    "date": "2026-04-20",
+    "successRate": 0.7777777777777778,
+    "avgDuration": 1552.2777777777778,
+    "taskCount": 18
+  },
+  {
+    "date": "2026-04-21",
+    "successRate": 0.8571428571428571,
+    "avgDuration": 638.8095238095239,
+    "taskCount": 21
+  },
+  {
+    "date": "2026-04-22",
+    "successRate": 0.9166666666666666,
+    "avgDuration": 45259.055555555555,
+    "taskCount": 36
+  },
+  {
+    "date": "2026-04-23",
+    "successRate": 1,
+    "avgDuration": 47464.7,
+    "taskCount": 30
+  },
+  {
+    "date": "2026-04-24",
+    "successRate": 1,
+    "avgDuration": 36242.37499999999,
+    "taskCount": 48
+  },
+  {
+    "date": "2026-04-25",
+    "successRate": 1,
+    "avgDuration": 37868.57142857143,
+    "taskCount": 14
+  },
+  {
+    "date": "2026-04-26",
+    "successRate": 0,
+    "avgDuration": 20795.85714285714,
+    "taskCount": 7
+  },
+  {
+    "date": "2026-04-27",
+    "successRate": 0.5,
+    "avgDuration": 40759.78571428572,
+    "taskCount": 14
+  },
+  {
+    "date": "2026-04-28",
+    "successRate": 1,
+    "avgDuration": 47863,
+    "taskCount": 1
+  },
+  {
+    "date": "2026-04-29",
+    "successRate": 1,
+    "avgDuration": 85116,
+    "taskCount": 1
+  },
+  {
+    "date": "2026-05-02",
+    "successRate": 1,
+    "avgDuration": 18070,
+    "taskCount": 1
+  },
+  {
+    "date": "2026-05-06",
+    "successRate": 1,
+    "avgDuration": 112600,
+    "taskCount": 1
+  }
+]

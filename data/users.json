@@ -1,0 +1,76 @@
+[
+  {
+    "id": "admin_liwei",
+    "username": "liwei",
+    "email": "liwei@163.com",
+    "password": "20a7cf2874c11afa696fa9086ecb1a46:513b235656a9b0146f33484449195d4333b6a2f843e59a81dd834f15483f7a7b4c8ac11885931aa6974672f96bba591fa11d39fb90c6ecd8c6921ba50d7e88fc",
+    "role": "admin",
+    "storagePreference": "hybrid",
+    "avatar": "/uploads/1776442066357_yy.png",
+    "isActive": true,
+    "createdAt": "2026-04-14T09:16:52.413Z",
+    "updatedAt": "2026-05-18T05:21:05.615Z",
+    "lastLoginAt": "2026-05-18T05:21:05.615Z"
+  },
+  {
+    "id": "1777342897105hwkc4zife",
+    "username": "looxjs",
+    "email": "looxjs@163.com",
+    "password": "c964cc61b4ec57cbdfdf3298209aace8:d5517660eae46d43f8cbfc237a52f6e0f4177328d45bbb271da713225f48ccd869d44644f1e3f1991cc79aaa92adf9938eb99c4791e983bc7d31e4e234797932",
+    "role": "user",
+    "storagePreference": "hybrid",
+    "avatar": "/uploads/1777488367917_61ca7f9546c96e53b322f202f24c4088.jpg",
+    "isActive": true,
+    "createdAt": "2026-04-28T02:21:37.105Z",
+    "updatedAt": "2026-05-18T07:46:08.397Z",
+    "lastLoginAt": "2026-05-18T07:46:08.397Z"
+  },
+  {
+    "id": "1777949830287uvq9drig1",
+    "username": "66zl",
+    "email": "66zl@163.com",
+    "password": "7a0eaf4217e5f14e2d3fb14dd2543c9b:5dcf132509898689e326b58f0fed60db7fca993f503957780658dc237f8657498d14d6263f0033c7605564ad8cf467fbc5cb3570961287436e69052d2daf460a",
+    "role": "user",
+    "storagePreference": "hybrid",
+    "avatar": "",
+    "isActive": true,
+    "createdAt": "2026-05-05T02:57:10.287Z",
+    "updatedAt": "2026-05-05T02:57:10.287Z"
+  },
+  {
+    "id": "1778068889087aq102xxz9",
+    "username": "bobo",
+    "email": "bobo@163.com",
+    "password": "320b7367327038c040573341307a8cf6:be18c5a09d08bce6c709c47a9e66e05dcab358da510c08e7003e75936166120cca8bd7416a7772e3c0218360bc018c3216b99d2b50c45cad2aeb17510391bb58",
+    "role": "user",
+    "storagePreference": "hybrid",
+    "avatar": "",
+    "isActive": true,
+    "createdAt": "2026-05-06T12:01:29.087Z",
+    "updatedAt": "2026-05-06T12:01:29.087Z"
+  },
+  {
+    "id": "1778300191865k1oej8ixq",
+    "username": "kkl",
+    "email": "kkl@163.com",
+    "password": "db5ce49bf8805d38dd1baf1f6b900f42:6c211aac84a45dddd32d7b5aae2326fe3db922c5cfaa5dfe85655e409e552ca1c1100df15a94cc53814602daee6684e6f75429515c09b5d10d20895305725b97",
+    "role": "user",
+    "storagePreference": "hybrid",
+    "avatar": "",
+    "isActive": true,
+    "createdAt": "2026-05-09T04:16:31.865Z",
+    "updatedAt": "2026-05-09T04:16:31.865Z"
+  },
+  {
+    "id": "1778326178576mz2zz7xui",
+    "username": "8876",
+    "email": "8876@163.com",
+    "password": "596d7b01bfd1d7f0a4b44570abd9a340:26af493ba894ac5e4d3b53dafc9047674b1f836d6af7a7d1f9a8cdc4ddca1f140c33dca81e54c40e5763c0bc4e084997919ba1a201a32ecef2257860ae519220",
+    "role": "user",
+    "storagePreference": "hybrid",
+    "avatar": "",
+    "isActive": true,
+    "createdAt": "2026-05-09T11:29:38.576Z",
+    "updatedAt": "2026-05-09T11:29:38.576Z"
+  }
+]

@@ -1,0 +1,69 @@
+name: 🐛 Bug Report
+description: 报告一个 Bug
+labels: bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## 🐛 Bug 描述
+        请详细描述遇到的问题
+
+  - type: textarea
+    id: bug-description
+    attributes:
+      label: 问题描述
+      placeholder: 请详细描述你遇到的 Bug，包括操作步骤、预期结果、实际结果
+    validations:
+      required: true
+
+  - type: textarea
+    id: bug-reproduce
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 
+        2. 
+        3. 
+
+  - type: dropdown
+    id: component
+    attributes:
+      label: 相关模块
+      options:
+        - AI Agent
+        - 知识库
+        - 财税记账
+        - 管理后台
+        - 其他
+    validations:
+      required: true
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 环境信息
+      placeholder: |
+        - 操作系统：
+        - Node.js 版本：
+        - 浏览器：
+        - API Key：通义千问 / GPT / 其他
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 错误日志
+      placeholder: 请粘贴相关的错误日志
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: 截图
+      placeholder: 可以上传截图帮助理解问题
+
+  - type: checkboxes
+    id: checkbox
+    attributes:
+      label: 
+      options:
+        - label: 我已确认这是 Bug
+          required: true

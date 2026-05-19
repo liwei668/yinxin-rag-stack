@@ -1,0 +1,293 @@
+[
+  {
+    "id": "1",
+    "name": "nomic-embed-text",
+    "type": "embedding",
+    "provider": "ollama",
+    "modelId": "nomic-embed-text:latest",
+    "apiId": "ollama-local",
+    "parameters": {
+      "temperature": 0.7,
+      "topP": 0.95,
+      "maxTokens": 4096,
+      "contextWindow": 65536,
+      "dimensions": 768
+    },
+    "features": {
+      "webSearch": false,
+      "ragEnabled": false,
+      "agentEnabled": false,
+      "memoryEnabled": false,
+      "streamOutput": false
+    },
+    "scenario": [],
+    "customPrompt": "",
+    "remark": "Ollama 本地 Embedding 模型",
+    "isDefault": true,
+    "isEnabled": true,
+    "createdBy": "system",
+    "createdAt": "2026-05-05T03:50:00.950Z",
+    "updatedAt": "2026-05-10T14:30:16.932Z",
+    "metrics": {
+      "totalCalls": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageResponseTime": 0,
+      "lastCallTime": null
+    },
+    "lastTestResult": {
+      "success": true,
+      "responseTime": 673,
+      "message": "连接成功，响应时间: 673ms，回复: Embedding 向量长度: 768",
+      "timestamp": "2026-05-10T14:30:16.932Z"
+    }
+  },
+  {
+    "id": "2",
+    "name": "deepseek-v4-pro",
+    "type": "llm",
+    "provider": "deepseek",
+    "modelId": "deepseek-v4-pro",
+    "apiId": "deepseek-api",
+    "parameters": {
+      "temperature": 0.7,
+      "topP": 0.95,
+      "maxTokens": 4096,
+      "contextWindow": 65536
+    },
+    "features": {
+      "webSearch": true,
+      "ragEnabled": true,
+      "agentEnabled": true,
+      "memoryEnabled": true,
+      "streamOutput": true
+    },
+    "scenario": [
+      "general",
+      "analysis"
+    ],
+    "customPrompt": "",
+    "remark": "DeepSeek V4 Pro 高性能模型",
+    "isDefault": false,
+    "isEnabled": true,
+    "createdBy": "system",
+    "createdAt": "2026-05-05T03:50:00.950Z",
+    "updatedAt": "2026-05-10T13:53:43.664Z",
+    "metrics": {
+      "totalCalls": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageResponseTime": 0,
+      "lastCallTime": null
+    },
+    "lastTestResult": {
+      "success": true,
+      "responseTime": 1826,
+      "message": "连接成功，响应时间: 1826ms，回复: 连接成功",
+      "timestamp": "2026-05-10T13:53:43.664Z"
+    }
+  },
+  {
+    "id": "4",
+    "name": "DeepSeek V4 Flash",
+    "type": "llm",
+    "provider": "deepseek",
+    "modelId": "deepseek-v4-flash",
+    "apiId": "deepseek-api",
+    "parameters": {
+      "temperature": 0.7,
+      "topP": 0.95,
+      "maxTokens": 4096,
+      "contextWindow": 65536
+    },
+    "features": {
+      "webSearch": true,
+      "ragEnabled": true,
+      "agentEnabled": true,
+      "memoryEnabled": true,
+      "streamOutput": true
+    },
+    "scenario": [
+      "general"
+    ],
+    "customPrompt": "",
+    "remark": "DeepSeek V4 Flash 快速模型",
+    "isDefault": true,
+    "isEnabled": true,
+    "createdBy": "system",
+    "createdAt": "2026-05-05T03:50:00.950Z",
+    "updatedAt": "2026-05-11T01:43:37.644Z",
+    "metrics": {
+      "totalCalls": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageResponseTime": 0,
+      "lastCallTime": null
+    },
+    "lastTestResult": {
+      "success": true,
+      "responseTime": 1023,
+      "message": "连接成功，响应时间: 1023ms，回复: 连接成功",
+      "timestamp": "2026-05-11T01:43:37.644Z"
+    }
+  },
+  {
+    "id": "wan27-t2v",
+    "modelId": "wan2.7-t2v",
+    "name": "通义万相2.7 文生视频",
+    "type": "t2v",
+    "provider": "dashscope",
+    "apiId": "dashscope-t2v",
+    "scenario": [
+      "video_generation"
+    ],
+    "isEnabled": true,
+    "isDefault": true,
+    "parameters": {
+      "resolution": "720P",
+      "ratio": "16:9",
+      "duration": 5,
+      "watermark": false
+    },
+    "display": true,
+    "createdAt": "2026-05-05T00:00:00.000Z",
+    "updatedAt": "2026-05-10T14:15:04.295Z",
+    "metrics": {
+      "totalCalls": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageResponseTime": 0,
+      "lastCallTime": null
+    },
+    "lastTestResult": {
+      "success": true,
+      "responseTime": 269,
+      "message": "连接成功，响应时间: 269ms，回复: API 连接正常（需开通文生视频服务权限）",
+      "timestamp": "2026-05-10T14:15:04.295Z"
+    }
+  },
+  {
+    "id": "happyhorse-t2v",
+    "modelId": "happyhorse-1.0-t2v",
+    "name": "快乐小马 高清文生视频",
+    "type": "t2v",
+    "provider": "dashscope",
+    "apiId": "dashscope-t2v",
+    "scenario": [
+      "video_generation"
+    ],
+    "isEnabled": true,
+    "isDefault": false,
+    "parameters": {
+      "resolution": "1080P",
+      "ratio": "16:9",
+      "duration": 5,
+      "watermark": false
+    },
+    "display": true,
+    "createdAt": "2026-05-05T00:00:00.000Z",
+    "updatedAt": "2026-05-10T14:15:02.323Z",
+    "metrics": {
+      "totalCalls": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageResponseTime": 0,
+      "lastCallTime": null
+    },
+    "lastTestResult": {
+      "success": true,
+      "responseTime": 309,
+      "message": "连接成功，响应时间: 309ms，回复: API 连接正常（需开通文生视频服务权限）",
+      "timestamp": "2026-05-10T14:15:02.323Z"
+    }
+  },
+  {
+    "id": "qwen3-vl-plus",
+    "modelId": "qwen3-vl-plus",
+    "name": "Qwen3-VL-Plus 多模态视觉",
+    "type": "multimodal",
+    "provider": "dashscope",
+    "apiId": "dashscope-api",
+    "scenario": [
+      "vision",
+      "chat"
+    ],
+    "isEnabled": true,
+    "isDefault": false,
+    "parameters": {
+      "temperature": 0.7,
+      "topP": 0.95,
+      "maxTokens": 8192,
+      "contextWindow": 65536
+    },
+    "display": true,
+    "createdAt": "2026-05-05T00:00:00.000Z",
+    "updatedAt": "2026-05-11T01:43:31.526Z",
+    "metrics": {
+      "totalCalls": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageResponseTime": 0,
+      "lastCallTime": null
+    },
+    "lastTestResult": {
+      "success": true,
+      "responseTime": 603,
+      "message": "连接成功，响应时间: 603ms，回复: 连接成功",
+      "timestamp": "2026-05-11T01:43:31.526Z"
+    },
+    "features": {
+      "webSearch": false,
+      "ragEnabled": false,
+      "agentEnabled": false,
+      "memoryEnabled": false
+    }
+  },
+  {
+    "name": "qwen2.5vl:7b",
+    "modelId": "qwen2.5vl:7b",
+    "type": "llm",
+    "provider": "ollama",
+    "apiId": "ollama-local",
+    "isEnabled": true,
+    "isDefault": false,
+    "remark": "",
+    "parameters": {
+      "temperature": 0.7,
+      "topP": 0.95,
+      "maxTokens": 4096,
+      "contextWindow": 65536,
+      "frequencyPenalty": 0,
+      "presencePenalty": 0,
+      "responseFormat": "text"
+    },
+    "features": {
+      "webSearch": false,
+      "ragEnabled": false,
+      "agentEnabled": false,
+      "memoryEnabled": false,
+      "streamOutput": true
+    },
+    "scenario": [
+      "general"
+    ],
+    "customPrompt": "",
+    "createdBy": "liwei",
+    "id": "1778326310428dpexmgtzx",
+    "createdAt": "2026-05-09T11:31:50.428Z",
+    "updatedAt": "2026-05-11T01:43:18.818Z",
+    "metrics": {
+      "totalCalls": 0,
+      "successCount": 0,
+      "failureCount": 0,
+      "averageResponseTime": 0,
+      "lastCallTime": null
+    },
+    "lastTestResult": {
+      "success": true,
+      "responseTime": 1211,
+      "message": "连接成功，响应时间: 1211ms，回复: Hello! How can I assist you today?",
+      "timestamp": "2026-05-11T01:43:18.818Z"
+    }
+  }
+]

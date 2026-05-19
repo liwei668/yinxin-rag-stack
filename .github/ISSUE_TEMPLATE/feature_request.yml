@@ -1,0 +1,46 @@
+name: ✨ Feature Request
+description: 提出新功能建议
+labels: enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ✨ 功能建议
+        请描述你希望添加的新功能
+
+  - type: textarea
+    id: feature-description
+    attributes:
+      label: 功能描述
+      placeholder: 请详细描述你希望添加的功能，包括使用场景、解决的问题
+    validations:
+      required: true
+
+  - type: textarea
+    id: feature-benefits
+    attributes:
+      label: 功能价值
+      placeholder: 这个功能能解决什么问题？带来什么价值？
+
+  - type: textarea
+    id: feature-alternatives
+    attributes:
+      label: 替代方案
+      placeholder: 你考虑过哪些替代方案？
+
+  - type: dropdown
+    id: priority
+    attributes:
+      label: 优先级
+      options:
+        - 高 - 核心功能，必须有
+        - 中 - 重要功能，希望能实现
+        - 低 - 锦上添花，有更好
+
+  - type: checkboxes
+    id: checkbox
+    attributes:
+      label: 
+      options:
+        - label: 我愿意为这个功能提供测试反馈
+          required: true

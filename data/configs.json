@@ -1,0 +1,33 @@
+{
+  "rag": {
+    "chunkSize": 800,
+    "topKResults": 3,
+    "similarityThreshold": 0.7,
+    "chunkOverlap": 150
+  },
+  "voice": {
+    "voiceApiId": "dashscope-tts",
+    "ttsEngine": "aliyun",
+    "ttsModel": "qwen3-tts-instruct-flash",
+    "asrEngine": "aliyun",
+    "asrLanguage": "auto",
+    "voiceName": "Ethan",
+    "voiceSpeed": 1.2,
+    "asrThreshold": 0.5
+  },
+  "system": {
+    "enableUserRegistration": true,
+    "sessionTimeout": 86400,
+    "maxUploadSize": 50,
+    "allowedFileTypes": ".txt,.md,.pdf,.doc,.docx,.xlsx,.xls,.csv,.html,.htm,.json,.xml,.jpg,.jpeg,.png,.gif,.bmp,.webp",
+    "enableApiLogging": true,
+    "cacheEnabled": true,
+    "cacheTTL": 3600
+  },
+  "features": {
+    "enableInternetSearch": true,
+    "enableRag": true,
+    "enableAgent": true,
+    "enableMemory": true
+  }
+}

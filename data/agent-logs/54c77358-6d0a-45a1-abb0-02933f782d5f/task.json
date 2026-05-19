@@ -1,0 +1,68 @@
+{
+  "id": "54c77358-6d0a-45a1-abb0-02933f782d5f",
+  "userId": "test",
+  "title": "打开百度",
+  "description": "帮我打开百度",
+  "status": "failed",
+  "plan": [
+    {
+      "id": "3fe6b2bf-1543-48a7-aacf-a61da151b7f4",
+      "index": 0,
+      "title": "打开百度",
+      "description": "访问百度首页",
+      "status": "failed",
+      "riskLevel": "safe",
+      "toolName": "browser_navigate",
+      "toolParams": {
+        "url": "https://www.baidu.com"
+      },
+      "startedAt": "2026-04-20T14:20:14.815Z",
+      "duration": 1,
+      "error": "打开网页失败: 域名 \"www.baidu.com\" 不在白名单中",
+      "completedAt": "2026-04-20T14:20:14.816Z"
+    }
+  ],
+  "currentStepIndex": 0,
+  "createdAt": "2026-04-20T14:20:12.534Z",
+  "screenshots": [],
+  "logs": [
+    {
+      "timestamp": "2026-04-20T14:20:12.536Z",
+      "level": "info",
+      "message": "AI 正在规划执行步骤..."
+    },
+    {
+      "timestamp": "2026-04-20T14:20:14.670Z",
+      "level": "success",
+      "message": "已生成 1 个执行步骤"
+    },
+    {
+      "timestamp": "2026-04-20T14:20:14.815Z",
+      "level": "info",
+      "message": "任务开始执行"
+    },
+    {
+      "timestamp": "2026-04-20T14:20:14.815Z",
+      "level": "info",
+      "message": "执行步骤 1/1: 打开百度"
+    },
+    {
+      "timestamp": "2026-04-20T14:20:14.816Z",
+      "level": "error",
+      "message": "步骤失败: 打开百度 - 打开网页失败: 域名 \"www.baidu.com\" 不在白名单中"
+    },
+    {
+      "timestamp": "2026-04-20T14:20:14.818Z",
+      "level": "warn",
+      "message": "完成 0/1 个步骤，1 个失败"
+    }
+  ],
+  "metadata": {},
+  "startedAt": "2026-04-20T14:20:14.815Z",
+  "completedAt": "2026-04-20T14:20:14.818Z",
+  "result": {
+    "success": false,
+    "summary": "完成 0/1 个步骤，1 个失败",
+    "screenshots": []
+  }
+}

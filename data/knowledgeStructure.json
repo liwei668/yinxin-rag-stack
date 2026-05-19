@@ -1,0 +1,86 @@
+[
+  {
+    "id": "uncategorized",
+    "name": "未分类",
+    "parentId": null,
+    "level": 0,
+    "isVirtual": true,
+    "visibility": "private",
+    "isArchived": false,
+    "version": 1,
+    "createdAt": "2026-05-02T02:08:50.663Z",
+    "updatedAt": "2026-05-02T02:08:50.663Z"
+  },
+  {
+    "id": "work-related",
+    "name": "bn公司",
+    "parentId": null,
+    "level": 0,
+    "isVirtual": false,
+    "visibility": "private",
+    "isArchived": false,
+    "version": 3,
+    "createdAt": "2026-05-02T02:08:50.663Z",
+    "updatedAt": "2026-05-18T12:17:45.520Z"
+  },
+  {
+    "id": "tech-docs",
+    "name": "财务资料",
+    "parentId": "work-related",
+    "level": 1,
+    "isVirtual": false,
+    "visibility": "private",
+    "isArchived": false,
+    "version": 2,
+    "createdAt": "2026-05-02T02:08:50.663Z",
+    "updatedAt": "2026-05-02T03:40:54.280Z"
+  },
+  {
+    "id": "kb-1777693266890-209yjt8vp",
+    "name": "公司信息",
+    "parentId": "work-related",
+    "level": 1,
+    "isVirtual": false,
+    "visibility": "private",
+    "isArchived": false,
+    "version": 1,
+    "createdAt": "2026-05-02T03:41:06.890Z",
+    "updatedAt": "2026-05-02T03:41:06.890Z"
+  },
+  {
+    "id": "kb-1777693280156-tq1ix4l93",
+    "name": "公司客服",
+    "parentId": "work-related",
+    "level": 1,
+    "isVirtual": false,
+    "visibility": "private",
+    "isArchived": false,
+    "version": 1,
+    "createdAt": "2026-05-02T03:41:20.156Z",
+    "updatedAt": "2026-05-02T03:41:20.156Z"
+  },
+  {
+    "id": "kb-1777693296065-r5epqjgpo",
+    "name": "技术文档",
+    "parentId": "work-related",
+    "level": 1,
+    "isVirtual": false,
+    "visibility": "private",
+    "isArchived": false,
+    "version": 1,
+    "createdAt": "2026-05-02T03:41:36.065Z",
+    "updatedAt": "2026-05-02T03:41:36.066Z"
+  },
+  {
+    "id": "kb-1779111717434-kmwnfigy2",
+    "name": "引信",
+    "parentId": null,
+    "level": 0,
+    "isVirtual": false,
+    "visibility": "private",
+    "isArchived": false,
+    "version": 1,
+    "createdAt": "2026-05-18T13:41:57.434Z",
+    "updatedAt": "2026-05-18T13:41:57.434Z"
+  }
+]

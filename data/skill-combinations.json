@@ -1,0 +1,34 @@
+{
+  "combinations": [
+    {
+      "id": "combo-sales",
+      "name": "销售咨询组合",
+      "description": "销售场景下的完整话术和技能组合",
+      "skills": ["prompt_sales.txt"],
+      "defaultModelId": "deepseek-v4-flash",
+      "isActive": true,
+      "createdAt": "2026-05-18T00:00:00.000Z",
+      "updatedAt": "2026-05-18T00:00:00.000Z"
+    },
+    {
+      "id": "combo-support",
+      "name": "技术支持组合",
+      "description": "技术支持场景下的技能组合",
+      "skills": ["prompt_support.txt"],
+      "defaultModelId": "deepseek-v4-flash",
+      "isActive": true,
+      "createdAt": "2026-05-18T00:00:00.000Z",
+      "updatedAt": "2026-05-18T00:00:00.000Z"
+    },
+    {
+      "id": "combo-compliance",
+      "name": "财税法分析组合",
+      "description": "财税法规分析的专业组合",
+      "skills": ["prompt_compliance.txt"],
+      "defaultModelId": "deepseek-v4-pro",
+      "isActive": true,
+      "createdAt": "2026-05-18T00:00:00.000Z",
+      "updatedAt": "2026-05-18T00:00:00.000Z"
+    }
+  ]
+}

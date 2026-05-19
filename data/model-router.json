@@ -1,0 +1,72 @@
+[
+  {
+    "id": "rule-default-flash",
+    "name": "默认-快速模式",
+    "type": "default",
+    "modelId": "deepseek-v4-flash",
+    "priority": 0,
+    "isActive": true,
+    "createdAt": "2026-05-18T00:00:00.000Z",
+    "updatedAt": "2026-05-18T00:00:00.000Z"
+  },
+  {
+    "id": "rule-finance-analysis",
+    "name": "财务分析规则",
+    "type": "keyword",
+    "keywords": ["财务", "报表", "利润", "成本", "税务", "发票", "记账"],
+    "modelId": "deepseek-v4-pro",
+    "priority": 100,
+    "comboId": "combo-compliance",
+    "isActive": true,
+    "createdAt": "2026-05-18T00:00:00.000Z",
+    "updatedAt": "2026-05-18T00:00:00.000Z"
+  },
+  {
+    "id": "rule-document-analysis",
+    "name": "文档分析规则",
+    "type": "fileType",
+    "fileTypes": ["pdf", "docx", "xlsx", "pptx"],
+    "modelId": "deepseek-v4-pro",
+    "priority": 90,
+    "comboId": "combo-compliance",
+    "isActive": true,
+    "createdAt": "2026-05-18T00:00:00.000Z",
+    "updatedAt": "2026-05-18T00:00:00.000Z"
+  },
+  {
+    "id": "rule-complex-reasoning",
+    "name": "复杂推理规则",
+    "type": "intent",
+    "intent": "complex_reasoning",
+    "modelId": "deepseek-v4-pro",
+    "priority": 95,
+    "comboId": "combo-compliance",
+    "isActive": true,
+    "createdAt": "2026-05-18T00:00:00.000Z",
+    "updatedAt": "2026-05-18T00:00:00.000Z"
+  },
+  {
+    "id": "rule-sales",
+    "name": "销售咨询规则",
+    "type": "keyword",
+    "keywords": ["购买", "价格", "产品", "报价", "折扣"],
+    "modelId": "deepseek-v4-flash",
+    "priority": 80,
+    "comboId": "combo-sales",
+    "isActive": true,
+    "createdAt": "2026-05-18T00:00:00.000Z",
+    "updatedAt": "2026-05-18T00:00:00.000Z"
+  },
+  {
+    "id": "rule-support",
+    "name": "技术支持规则",
+    "type": "keyword",
+    "keywords": ["登录", "错误", "问题", "故障", "帮助"],
+    "modelId": "deepseek-v4-flash",
+    "priority": 85,
+    "comboId": "combo-support",
+    "isActive": true,
+    "createdAt": "2026-05-18T00:00:00.000Z",
+    "updatedAt": "2026-05-18T00:00:00.000Z"
+  }
+]

@@ -1,0 +1,68 @@
+{
+  "id": "e7c99e5e-7e28-4ff9-9ee8-9ad374caf185",
+  "userId": "anonymous",
+  "title": "帮我打开百度注册一个百度账号，并发布一条消息。",
+  "description": "帮我打开百度注册一个百度账号，并发布一条消息。",
+  "status": "failed",
+  "plan": [
+    {
+      "id": "e3121646-f441-4cd7-b9e2-919cd3370181",
+      "index": 0,
+      "title": "打开百度",
+      "description": "访问百度首页",
+      "status": "failed",
+      "riskLevel": "safe",
+      "toolName": "browser_navigate",
+      "toolParams": {
+        "url": "https://www.baidu.com"
+      },
+      "startedAt": "2026-04-20T15:36:44.795Z",
+      "duration": 2085,
+      "error": "打开网页失败: fetch failed",
+      "completedAt": "2026-04-20T15:36:46.880Z"
+    }
+  ],
+  "currentStepIndex": 0,
+  "createdAt": "2026-04-20T15:36:40.846Z",
+  "screenshots": [],
+  "logs": [
+    {
+      "timestamp": "2026-04-20T15:36:40.849Z",
+      "level": "info",
+      "message": "AI 正在规划执行步骤..."
+    },
+    {
+      "timestamp": "2026-04-20T15:36:42.979Z",
+      "level": "success",
+      "message": "已生成 1 个执行步骤"
+    },
+    {
+      "timestamp": "2026-04-20T15:36:44.795Z",
+      "level": "info",
+      "message": "任务开始执行"
+    },
+    {
+      "timestamp": "2026-04-20T15:36:44.795Z",
+      "level": "info",
+      "message": "执行步骤 1/1: 打开百度"
+    },
+    {
+      "timestamp": "2026-04-20T15:36:46.880Z",
+      "level": "error",
+      "message": "步骤失败: 打开百度 - 打开网页失败: fetch failed"
+    },
+    {
+      "timestamp": "2026-04-20T15:36:46.884Z",
+      "level": "warn",
+      "message": "完成 0/1 个步骤，1 个失败"
+    }
+  ],
+  "metadata": {},
+  "startedAt": "2026-04-20T15:36:44.795Z",
+  "completedAt": "2026-04-20T15:36:46.884Z",
+  "result": {
+    "success": false,
+    "summary": "完成 0/1 个步骤，1 个失败",
+    "screenshots": []
+  }
+}

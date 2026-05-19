@@ -1,0 +1,13 @@
+node_modules
+.next
+.git
+.trae
+*.md
+.env.local
+.env
+uploads/
+test-*.js
+test-*.ts
+test-*.html
+test-*.txt
+test.base64

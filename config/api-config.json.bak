@@ -1,0 +1,14 @@
+{
+  "apis": {
+    "tavily": {
+      "type": "tavily",
+      "apiKey": "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",
+      "cacheTTL": 300
+    },
+    "deepseek": {
+      "type": "deepseek",
+      "apiKey": "sk-d80abf6ae5d04f84b60eadb1721a904c",
+      "cacheTTL": 60
+    }
+  }
+}

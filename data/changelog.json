@@ -1,0 +1,215 @@
+[
+  {
+    "version": "v2.0505-10",
+    "date": "2026-05-11",
+    "product": "AGI.ai",
+    "changes": [
+      "RAG 调用修复\tsrc/api/rag/index.ts\t✅",
+      "Vision API 支持多模型\tapp/api/vision/route.ts\t✅",
+      "模型下拉框显示多模态\tapp/api/models/route.ts\t✅",
+      "侧边栏头像移到顶部\tcomponents/Sidebar.tsx\t✅",
+      "移除收起按钮和分割线\tcomponents/Sidebar.tsx\t✅",
+      "新建对话按钮\tapp/page.tsx\t✅",
+      "自定义 Tooltip\tapp/page.tsx\t✅",
+      "侧边栏图标替换\tapp/page.tsx"
+    ]
+  },
+  {
+    "version": "v2.0505-1",
+    "date": "2026-05-05",
+    "product": "AGI.ai",
+    "changes": [
+      "聊天模型支持12 项能力开关，新增流式输出、多模态、联网、RAG、Agent、记忆等完整控制",
+      "完善 /api/chat 统一路由，优化请求清洗逻辑，修复历史遗留异常问题",
+      "后台模型管理界面新增场景标签列，模型用途一目了然",
+      "输入框下拉框样式恢复，提升操作体验",
+      "任务输入框优化默认值与参数配置，更稳定易用",
+      "消息列表优化数学公式渲染，降级兼容避免展示异常",
+      "API 管理器支持动态配置重载，优化 Prompt 与请求参数逻辑"
+    ]
+  },
+  {
+    "version": "v2.0504-3",
+    "date": "2026-05-04",
+    "product": "AGI.ai",
+    "changes": [
+      "模型列表场景标签\t表格新增「适用场景」列，彩色 badge 显示（通用/分析/多模态）",
+      "Agent 场景隔离\tAgent 不传 model → 走自动路由",
+      "多模态路由\t图片通过 /api/parse 预处理成文字，",
+      "会话粘性\t前端传 conversationId，后端用内存 Map 记录",
+      "模型不可用降级\tcallLLM 失败 → 同场景备用模型"
+    ]
+  },
+  {
+    "version": "v2.0504-2",
+    "date": "2026-05-04",
+    "product": "AGI.ai",
+    "changes": [
+      "*功能开关** | canSearch/canRag/canAgent/canMemory | ✅ 全部 |",
+      "| **系统设置** | 注册/超时/上传/缓存 | ✅ 全部 |",
+      "| **语音设置** | voiceApiId/tts/asr/前端 | ✅ 全部 |",
+      "| **智能路由** | scenario 字段/接口/UI/路由层 | ✅ 全部 |",
+      "| **生成参数** | 3 个分支 + DeepSeekAPIClient | ✅ 全部 |",
+      "| **Bug 修复** | apiId 硬编码/记账模块崩溃 | ✅ 全部 |",
+      "| **编译** | next build | ✅ 0 错误 |"
+    ]
+  },
+  {
+    "version": "v2.0504-1",
+    "date": "2026-05-04",
+    "product": "AGI.ai",
+    "changes": [
+      "对话交互规范 | Chat interaction specification",
+      "搜索引擎切换为 Tavily API | Search engine migrated to Tavily API",
+      "搜索关键词与预处理优化 | Search keyword & preprocessing enhancement",
+      "新闻专属检索与格式标准化 | News dedicated search & format standardization",
+      "Agent 触发逻辑 & 异常兜底重构 | Agent trigger rule & error fallback refactoring",
+      "空结果缓存策略优化 | Empty result cache strategy optimized",
+      "全局实时时间注入 | Global real-time time injection",
+      "Prompt 管理器逻辑修复 | Prompt manager bug fix & config protection"
+    ]
+  },
+  {
+    "version": "v2.0502-2",
+    "date": "2026-05-02",
+    "product": "AGI.ai",
+    "changes": [
+      "prompts.json 数据完整性\t10",
+      "默认模板（露丝/引信）\t3",
+      "统计字段初始化\t2",
+      "前端 prop 传递链（3个组件）\t10",
+      "API 路由 templateId 参数\t5",
+      "promptManager 核心方法\t10",
+      "管理后台统计显示"
+    ]
+  },
+  {
+    "version": "v2.0502-1",
+    "date": "2026-05-02",
+    "product": "AGI.ai",
+    "changes": [
+      "修复：PDF上传报错（pdfParse is not a function）→ 改用 pdfjs-dist 直接解析",
+      "优化：表格文字粘连、乱码 → 智能字符合并 + 自然语言转换",
+      "新增：格式输出，完全满足RAG检索需求"
+    ]
+  },
+  {
+    "version": "v2.0501-3",
+    "date": "2026-04-30",
+    "product": "AGI.ai",
+    "changes": [
+      "手机登录/注册页",
+      "更新日志 — 新增弹窗式添加（含日期选择），管理员专属权限",
+      "AI 名称 — 全项目统一为\"露丝\"（7处）",
+      "提示词 — 加8条铁律（禁止编造、场景隔离、上下文记忆）+ 注入当前日期",
+      "知识库 — 仅企业业务场景检索，问天气不再弹出税务内容",
+      "Agent 体验 — 对话中隐藏中间过程，失败时友好提示",
+      "时间问答 — 扩展口语化匹配，\"查一下时间\"直接回答不走 Agent",
+      "局域网访问 — 开放外部 IP 白名单"
+    ]
+  },
+  {
+    "version": "v2.0501-2",
+    "date": "2026-04-30",
+    "product": "AGI.ai",
+    "changes": [
+      "独立登录页** `/login` — 微信二维码 + 邮箱登录，| `app/login/page.tsx` |",
+      "独立注册页** `/register` — 用户名+邮箱+密码，app/register/page.tsx` |",
+      "未登录自动跳转** `/login`，加载中显示 loading | `app/page.tsx` |",
+      "退出登录跳转**`/login`components/Sidebar.tsx` |",
+      "顶栏精简** — 只保留汉堡菜单+品牌名，移除头像和下拉菜单 | `components/TopBar.tsx` |",
+      "左侧栏用户卡片** — 头像+用户名+邮箱，管理员标签 | `components/Sidebar.tsx` |",
+      "用户下拉菜单** — 更换头像、关于、系统设置（管理员）、退出登录 | `components/Sidebar.tsx` |",
+      "关于弹窗管理员增删日志** — 新增按钮→弹窗填写，每条日志可删除 | `components/AboutModal.tsx` |",
+      "局域网访问** — `npx next dev -H 0.0.0.0` |"
+    ]
+  },
+  {
+    "version": "v2.0501-1",
+    "date": "2026-05-01",
+    "product": "AGI.ai",
+    "changes": [
+      "新功能",
+      "MTC 多步引导系统",
+      "用户点击“转为文档编辑”按钮时，弹出分步引导弹窗，收集用户配置后再打开编辑器。",
+      "• 步骤 1：选择导出格式（Word / PDF / Markdown）",
+      "• 步骤 2：选择表格编辑模式（可编辑 / 纯文本）",
+      "• 步骤 3：选择表格异常修复策略（自动修复 / 仅靠 AI）",
+      "• 支持跳过（使用默认配置）和取消",
+      "新增文件：",
+      "• utils/mtc.ts — 类型定义、默认配置、步骤配置、关键词库",
+      "• components/MTCGuide.tsx — 3 步引导弹窗组件",
+      "• utils/scrollLock.ts — 全局滚动锁引用计数管理器",
+      "Bug 修复",
+      "MTC 触发时机错误",
+      "• 问题：用户发送消息前就弹出引导，内容还没生成就要选格式",
+      "• 修复：移除发送前拦截，改为绑定在“转为文档编辑”按钮上",
+      "Markdown → HTML 表格转换失败",
+      "• 问题：表格被拆分为多个独立表格，分隔行显示为纯文本",
+      "• 修复：预处理正则修复（避免表格内部插入空行）、分隔行收集阶段跳过、恢复丢失的 inTable",
+      "变量",
+      "TipTap 编辑器内容不更新",
+      "• 问题：编辑器被 React 复用，新内容不会渲染",
+      "• 修复：给 DocumentEditor 加 key 属性，确保每次新内容重新创建编辑器",
+      "优化",
+      "AI 输出格式规范强化",
+      "• 将格式规则独立为 FORMAT_RULES 常量，拼接到 System Prompt 末尾（最高注意力权重）",
+      "• 新增表格铁律：前后空行、分隔行列数一致、禁止伪表格",
+      "第 2 页",
+      "• 新增自检指令：AI 输出表格后必须逐行检查 | 数量一致性",
+      "/api/chat source 参数区分请求来源",
+      "• chat：普通对话，执行全部逻辑",
+      "• mtc：文档生成，跳过分支/偏好提取",
+      "• mtc-check：意图判定，直接调用 LLM 返回，跳过所有重量级逻辑",
+      "• polish：AI 润色，跳过知识库/记忆/分支等全部逻辑",
+      "改动文件",
+      "文件 操作 改动",
+      "utils/mtc.ts 新建 MTC 类型、配置、关键词"
+    ]
+  },
+  {
+    "version": "v2.0429-1",
+    "date": "2026-04-29",
+    "product": "AGI.ai",
+    "changes": [
+      "API 正常返回 JSON（{\"error\":\"未登录\"}），"
+    ]
+  },
+  {
+    "version": "v2.0429",
+    "date": "2026-04-29",
+    "product": "AGI.ai",
+    "changes": [
+      "管理面板改为左侧侧边栏布局，支持展开/收起，状态自动记忆",
+      "模型选择改为动态读取管理面板配置，支持添加/删除/启用/禁用模型",
+      "模型数据持久化到 JSON 文件，重启不丢失",
+      "支持 Ollama 本地模型，浏览器直接调用 localhost:11434",
+      "支持阿里云 DashScope（Qwen3-Max）云端模型",
+      "模型连接测试改为真实 API 调用验证",
+      "新增「转为文档编辑」功能，基于 TipTap 富文本编辑器",
+      "文档编辑支持导出 Markdown 和 PDF 打印",
+      "文档编辑支持 AI 润色（正式书面语/精简表述/专业术语）",
+      "「关于」页面重构为单页面布局，新增品牌版本卡片、功能链接列表",
+      "从管理面板移除无效的浏览器管理模块",
+      "修复 TipTap Table 扩展导入兼容性问题",
+      "修复 lowlight 代码高亮模块导入问题"
+    ]
+  },
+  {
+    "version": "v1.0.0-beta",
+    "date": "2025-04-18",
+    "product": "AGI.ai",
+    "changes": [
+      "初始版本发布",
+      "支持 DeepSeek Chat / Reasoner / Qwen-VL-Max 三种模型切换",
+      "支持联网搜索（百度/Bing 双引擎）",
+      "支持图片/文档识别（Qwen-VL-Max）",
+      "支持文字转语音（阿里云 DashScope TTS）",
+      "支持知识库管理与文档上传",
+      "支持多轮对话与对话历史管理",
+      "支持用户注册/登录",
+      "响应式设计，支持移动端",
+      "添加关于、版本、帮助文档、更新日志页面"
+    ]
+  }
+]

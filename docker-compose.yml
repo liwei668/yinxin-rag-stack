@@ -1,0 +1,96 @@
+# ============================================
+# Yinxin.AGL.ai Docker Compose 配置
+# ============================================
+
+services:
+  # Next.js 应用
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: yinxin-agl-app
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - MONGODB_URI=mongodb://mongodb:27017/yinxin-agl
+      - REDIS_URL=redis://redis:6379
+      - DASHSCOPE_API_KEY=${DASHSCOPE_API_KEY}
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - yinxin-network
+    volumes:
+      - uploads-data:/app/public/uploads
+
+  # Nginx 反向代理
+  nginx:
+    image: nginx:alpine
+    container_name: yinxin-agl-nginx
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro
+      - ./nginx/ssl:/etc/nginx/ssl:ro
+      - nginx-logs:/var/log/nginx
+    depends_on:
+      - app
+    networks:
+      - yinxin-network
+
+  # MongoDB（如已有外部 MongoDB，可删除此服务）
+  mongodb:
+    image: mongo:7
+    container_name: yinxin-agl-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER:-admin}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD:-admin123}
+    volumes:
+      - mongodb-data:/data/db
+      - mongodb-config:/data/configdb
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - yinxin-network
+
+  # Redis（如已有外部 Redis，可删除此服务）
+  redis:
+    image: redis:7-alpine
+    container_name: yinxin-agl-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --requirepass ${REDIS_PASSWORD:-}
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - yinxin-network
+
+volumes:
+  uploads-data:
+  mongodb-data:
+  mongodb-config:
+  redis-data:
+  nginx-logs:
+
+networks:
+  yinxin-network:
+    driver: bridge
