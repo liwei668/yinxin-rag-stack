@@ -488,19 +488,14 @@ const MessageList: React.FC<MessageListProps> = ({
     <div className="mb-4 max-w-6xl mx-auto">
       {messages.map((msg, index) => (
         <div key={index} className="mb-4">
-          {/* AI消息布局 - 向左靠近AI头像 */}
+          {/* AI消息布局 */}
           {msg.role === 'assistant' && (
             <div className="flex items-start">
-              {/* AI头像 */}
-              <div className="w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-emerald-500 to-teal-600 shadow-md mr-3 md:mr-4">
-                <span className="text-white text-sm md:text-base font-bold">露</span>
-              </div>
               {/* AI消息气泡 */}
               <div className="flex-1 max-w-4xl">
                 <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4 md:p-6 rounded-tl-xl">
                   <div className="mb-2">
                     <span className="text-sm font-semibold text-emerald-700">露丝</span>
-                    <span className="text-xs text-gray-400 ml-2">引信（中国）技术有限公司</span>
                   </div>
                   <div className="prose prose-emerald max-w-none">
                     {renderContent(msg.content)}
@@ -518,23 +513,9 @@ const MessageList: React.FC<MessageListProps> = ({
             </div>
           )}
           
-          {/* 用户消息布局 - 向右靠近用户头像 */}
+          {/* 用户消息布局 */}
           {msg.role === 'user' && (
             <div className="flex items-start flex-row-reverse">
-              {/* 用户头像 */}
-              <div className="ml-2 md:ml-3">
-                {user?.avatar ? (
-                  <img 
-                    src={user.avatar} 
-                    alt="用户头像" 
-                    className="w-8 h-8 md:w-10 md:h-10 rounded-full object-cover flex-shrink-0"
-                  />
-                ) : (
-                  <div className="w-8 h-8 md:w-10 md:h-10 rounded-full flex items-center justify-center flex-shrink-0 bg-gradient-to-br from-emerald-500 to-teal-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                  </div>
-                )}
-              </div>
               {/* 用户消息气泡 */}
               <div className="rounded-2xl p-3 md:p-4 rounded-tr-lg">
                 <div className="leading-relaxed">

@@ -11,6 +11,7 @@ export interface CustomerProfile {
   companyName: string;
   contactName: string;
   contactEmail: string;
+  contactPhone?: string;
   industry?: string;
   notes?: string;
   tags?: string[];

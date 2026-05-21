@@ -319,11 +319,19 @@ const Home: React.FC = () => {
       : null
   }, [currentConversationId, conversations])
 
+  // 生成唯一ID（兼容移动端HTTP环境）
+  const generateId = () => {
+    if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+      return crypto.randomUUID()
+    }
+    return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+  }
+
   const addMessageToCurrentConversation = useCallback((message: Message): string | undefined => {
     // 自动补 id（兼容旧数据）
     const messageWithId: Message = {
       ...message,
-      id: message.id || crypto.randomUUID()
+      id: message.id || generateId()
     }
 
     let targetConversationId = currentConversationId

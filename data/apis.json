@@ -151,5 +151,39 @@
     "retryCount": 2,
     "retryOnTimeout": true,
     "maxQPS": 10
+  },
+  {
+    "api_id": "tianyancha-company-api",
+    "name": "天眼查企业信息查询API",
+    "type": "搜索",
+    "baseUrl": "https://mcp.tianyancha.com/v1",
+    "apiKey": "38693361-54b4-4acd-8ca5-b258eade669c",
+    "timeout": 30000,
+    "isActive": true,
+    "remark": "",
+    "proxyEnabled": false,
+    "proxyUrl": "",
+    "headers": [],
+    "requestPrefix": "",
+    "retryCount": 2,
+    "retryOnTimeout": true,
+    "maxQPS": 10
+  },
+  {
+    "api_id": "text-embedding-v3",
+    "name": "阿里云向量模型",
+    "type": "Embedding",
+    "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings",
+    "apiKey": "sk-237b5a8ea8ca4fbc92fab068d567b323",
+    "timeout": 30000,
+    "isActive": true,
+    "remark": "阿里云百炼Embedding API",
+    "proxyEnabled": false,
+    "proxyUrl": "",
+    "headers": [],
+    "requestPrefix": "",
+    "retryCount": 2,
+    "retryOnTimeout": true,
+    "maxQPS": 10
   }
 ]

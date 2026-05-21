@@ -194,36 +194,62 @@ export const apiStore = {
 
       const timeout = api.timeout || 10000
 
-      // 尝试 HEAD 请求测试连通性
+      // 尝试测试连通性
       let success = false
       let message = ''
 
-      try {
-        const response = await fetch(api.baseUrl, {
-          method: 'HEAD',
-          headers,
-          signal: AbortSignal.timeout(timeout),
-        })
-        success = response.ok || response.status === 405 || response.status === 404 || response.status === 401
-        message = success
-          ? `HEAD 请求成功 (HTTP ${response.status})`
-          : `HEAD 请求失败 (HTTP ${response.status})`
-      } catch {
-        // HEAD 不支持时尝试 GET
+      // Embedding 类型 API 使用 POST 请求测试
+      if (api.type === 'Embedding') {
         try {
           const response = await fetch(api.baseUrl, {
-            method: 'GET',
+            method: 'POST',
+            headers: { ...headers, 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: api.api_id,
+              input: 'test'
+            }),
+            signal: AbortSignal.timeout(timeout),
+          })
+          // 400 可能是参数问题，但 API 连接是正常的
+          success = response.ok || response.status === 400 || response.status === 401
+          if (success) {
+            message = `POST 请求成功 (HTTP ${response.status})`
+          } else {
+            message = `POST 请求失败 (HTTP ${response.status})`
+          }
+        } catch (fetchError: any) {
+          success = false
+          message = `连接失败: ${fetchError.message || fetchError}`
+        }
+      } else {
+        // 其他类型使用 HEAD/GET
+        try {
+          const response = await fetch(api.baseUrl, {
+            method: 'HEAD',
             headers,
             signal: AbortSignal.timeout(timeout),
           })
           success = response.ok || response.status === 405 || response.status === 404 || response.status === 401
           message = success
-            ? `GET 请求成功 (HTTP ${response.status})`
-            : `GET 请求失败 (HTTP ${response.status})`
-        } catch (fetchError: any) {
-          // 连接失败
-          success = false
-          message = `连接失败: ${fetchError.message || fetchError}`
+            ? `HEAD 请求成功 (HTTP ${response.status})`
+            : `HEAD 请求失败 (HTTP ${response.status})`
+        } catch {
+          // HEAD 不支持时尝试 GET
+          try {
+            const response = await fetch(api.baseUrl, {
+              method: 'GET',
+              headers,
+              signal: AbortSignal.timeout(timeout),
+            })
+            success = response.ok || response.status === 405 || response.status === 404 || response.status === 401
+            message = success
+              ? `GET 请求成功 (HTTP ${response.status})`
+              : `GET 请求失败 (HTTP ${response.status})`
+          } catch (fetchError: any) {
+            // 连接失败
+            success = false
+            message = `连接失败: ${fetchError.message || fetchError}`
+          }
         }
       }
 

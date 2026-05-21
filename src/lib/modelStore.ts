@@ -462,13 +462,7 @@ export const modelStore = {
           if (model.provider === 'dashscope') apiKey = process.env.DASHSCOPE_API_KEY || ''
         }
 
-        // 构建端点 URL
-        let endpoint = baseUrl
-        if (endpoint && !endpoint.includes('/chat/completions')) {
-          endpoint = endpoint.replace(/\/$/, '') + '/chat/completions'
-        }
-
-        if (!endpoint) {
+        if (!baseUrl) {
           responseText = '未配置 API 端点（请检查模型关联的 API 配置）'
         } else {
           const headers: Record<string, string> = { 'Content-Type': 'application/json' }
@@ -514,10 +508,36 @@ export const modelStore = {
               const body = await response.text().catch(() => '');
               responseText = `HTTP ${response.status}: ${body.substring(0, 100)}`;
             }
+          } else if (model.type === 'embedding') {
+            // Embedding 模型使用 embeddings 接口测试
+            const response = await fetch(baseUrl, {
+              method: 'POST',
+              headers,
+              body: JSON.stringify({
+                model: model.modelId,
+                input: 'test',
+              }),
+              signal: AbortSignal.timeout(15000),
+            });
+            // 400 可能是参数问题，但 API 连接是正常的
+            success = response.ok || response.status === 400 || response.status === 401;
+            if (success) {
+              const data = await response.json().catch(() => null);
+              if (data?.data?.[0]?.embedding) {
+                const embeddingLength = data.data[0].embedding.length;
+                responseText = `Embedding 向量长度: ${embeddingLength}`;
+              } else {
+                responseText = `API 连接正常 (HTTP ${response.status})`;
+              }
+            } else {
+              const body = await response.text().catch(() => '');
+              responseText = `HTTP ${response.status}: ${body.substring(0, 100)}`;
+            }
           } else {
             // 普通 LLM/多模态模型使用 chat 接口测试
+            let endpoint = baseUrl;
             if (endpoint && !endpoint.includes('/chat/completions')) {
-              endpoint = endpoint.replace(/\/$/, '') + '/chat/completions'
+              endpoint = endpoint.replace(/\/$/, '') + '/chat/completions';
             }
 
             const response = await fetch(endpoint, {

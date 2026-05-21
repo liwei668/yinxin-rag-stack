@@ -16,6 +16,7 @@
     "@capacitor/core": "^8.3.4",
     "@capacitor/ios": "^8.3.4",
     "@huggingface/transformers": "^4.0.1",
+    "@modelcontextprotocol/sdk": "^1.29.0",
     "@novnc/novnc": "^1.6.0",
     "@tiptap/extension-code-block-lowlight": "^3.22.5",
     "@tiptap/extension-table": "^3.22.5",

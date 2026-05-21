@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { searchCompany as mcpSearchCompany, getCompanyDetail as mcpGetCompanyDetail, searchCompaniesByIndustryRegion as mcpSearchByIndustryRegion, getStaffInfo as mcpGetStaffInfo, batchSearchAndArchive as mcpBatchSearchAndArchive } from '../lib/tianyanchaMCPClient'
 
 // ========== 接口定义 ==========
 
@@ -208,6 +209,57 @@ class TavilyAPIClient {
   }
 }
 
+// ========== 天眼查 API 客户端（使用 MCP）==========
+
+class TianyanchaAPIClient {
+  constructor(private apiKey: string) {}
+
+  async searchCompany(params: { name: string; keyword?: string; pageSize?: number; pageNum?: number }) {
+    const { name, keyword, pageSize = 10, pageNum = 1 } = params
+
+    try {
+      const query = name || keyword
+      if (!query) {
+        throw new Error('请提供公司名称或关键词')
+      }
+
+      console.log('[TianyanchaAPI] 使用 MCP 搜索:', query)
+      
+      // 使用 MCP 客户端调用
+      const result = await mcpSearchCompany({
+        name: query,
+        pageSize,
+        pageNum,
+      })
+
+      return { data: result.data, total: result.total }
+    } catch (error) {
+      console.error('天眼查 MCP 搜索错误:', error)
+      return { data: [], total: 0 }
+    }
+  }
+
+  async getCompanyDetail(params: { companyId: string }) {
+    const { companyId } = params
+
+    try {
+      if (!companyId) {
+        throw new Error('请提供公司 ID')
+      }
+
+      console.log('[TianyanchaAPI] 使用 MCP 获取详情:', companyId)
+      
+      // 使用 MCP 客户端调用
+      const result = await mcpGetCompanyDetail(companyId)
+
+      return result
+    } catch (error) {
+      console.error('天眼查 MCP 详情错误:', error)
+      return null
+    }
+  }
+}
+
 // ========== DeepSeek API 客户端 ==========
 
 class DeepSeekAPIClient {
@@ -366,6 +418,8 @@ class APIManager {
           client = new TavilyAPIClient(api.apiKey || process.env.TAVILY_API_KEY || '')
         } else if (type === 'llm' || name.includes('deepseek')) {
           client = new DeepSeekAPIClient(api.apiKey || '')
+        } else if (name.includes('天眼查') || api.api_id.includes('tianyancha')) {
+          client = new TianyanchaAPIClient(api.apiKey || '')
         }
 
         if (client) {

@@ -491,6 +491,236 @@ toolRegistry.register({
   },
 });
 
+// 10.5 天眼查企业信息查询
+toolRegistry.register({
+  name: 'tianyancha_search',
+  description: '通过天眼查API查询企业信息，支持公司名称搜索和企业详情查询，并可自动保存到客户档案',
+  category: '搜索',
+  riskLevel: 'safe',
+  requiresApproval: false,
+  parameters: [
+    { name: 'company_name', type: 'string', description: '公司名称（如：阿里巴巴）', required: false },
+    { name: 'keyword', type: 'string', description: '搜索关键词（与company_name二选一）', required: false },
+    { name: 'company_id', type: 'string', description: '公司ID（用于获取详细信息，与前两个参数互斥）', required: false },
+    { name: 'page_size', type: 'number', description: '每页返回数量（默认10）', required: false, default: 10 },
+    { name: 'page_num', type: 'number', description: '页码（默认1）', required: false, default: 1 },
+    { name: 'save_to_archive', type: 'boolean', description: '是否自动保存到客户档案（默认true）', required: false, default: true },
+  ],
+  executor: async (params) => {
+    const { company_name, keyword, company_id, page_size, page_num, save_to_archive } = params;
+    
+    try {
+      const { callAPI } = await import('../../api/apiManager');
+      
+      if (company_id) {
+        // 获取公司详情
+        const result = await callAPI('tianyancha-company-api', 'getCompanyDetail', {
+          companyId: company_id
+        });
+        
+        if (!result) {
+          return { success: false, error: '未找到该公司信息' };
+        }
+        
+        // 如果需要保存到客户档案
+        if (save_to_archive !== false) {
+          const { customerArchiveStore, writeCustomerFile } = await import('../../../lib/customerArchiveStore');
+          
+          // 创建或更新客户档案
+          const existing = customerArchiveStore.findByCustomerId(company_id);
+          let archiveId: string;
+          
+          if (existing) {
+            customerArchiveStore.update(existing.id, {
+              companyName: result.name || company_name || '未知公司',
+              industry: result.industry || result.type || '',
+              notes: JSON.stringify(result, null, 2),
+              updatedAt: new Date().toISOString(),
+            });
+            archiveId = existing.id;
+          } else {
+            archiveId = customerArchiveStore.create({
+              customerId: company_id,
+              companyName: result.name || company_name || '未知公司',
+              contactName: '',
+              contactEmail: '',
+              industry: result.industry || result.type || '',
+              notes: JSON.stringify(result, null, 2),
+              tags: ['天眼查', '企业信息'],
+              status: 'active',
+            });
+          }
+          
+          // 保存详细档案文件
+          const fileContent = `[客户画像]
+公司名称：${result.name || '未知公司'}
+行业：${result.industry || result.type || '未知'}
+公司ID：${company_id}
+注册资本：${result.regCapital || '未知'}
+成立时间：${result.establishTime || '未知'}
+注册地址：${result.address || '未知'}
+经营范围：${result.businessScope || '未知'}
+
+[公司详情]
+${JSON.stringify(result, null, 2)}
+
+[对话记录]
+
+[待办事项]
+`;
+          writeCustomerFile(company_id, fileContent);
+          
+          return {
+            success: true,
+            message: `已获取公司详情: ${result.name || '未知公司'}，并已保存到客户档案`,
+            data: { ...result, archiveId },
+          };
+        }
+        
+        return {
+          success: true,
+          message: `已获取公司详情: ${result.name || '未知公司'}`,
+          data: result,
+        };
+      } else if (company_name || keyword) {
+        // 搜索公司
+        const result = await callAPI('tianyancha-company-api', 'searchCompany', {
+          name: company_name,
+          keyword,
+          pageSize: page_size,
+          pageNum: page_num
+        });
+        
+        const count = result.data?.length || 0;
+        
+        // 如果只找到一个公司，自动保存到档案
+        if (count === 1 && save_to_archive !== false && result.data?.[0]) {
+          const company = result.data[0];
+          const { customerArchiveStore, writeCustomerFile } = await import('../../../lib/customerArchiveStore');
+          
+          const existing = customerArchiveStore.findByCustomerId(company.id || company.companyId || company_name || '');
+          
+          if (!existing) {
+            const archiveId = customerArchiveStore.create({
+              customerId: company.id || company.companyId || company_name || '',
+              companyName: company.name || company.companyName || company_name || '未知公司',
+              contactName: '',
+              contactEmail: '',
+              industry: company.industry || company.type || '',
+              notes: JSON.stringify(company, null, 2),
+              tags: ['天眼查', '企业信息'],
+              status: 'active',
+            });
+            
+            const fileContent = `[客户画像]
+公司名称：${company.name || company.companyName || '未知公司'}
+行业：${company.industry || company.type || '未知'}
+公司ID：${company.id || company.companyId || '未知'}
+
+[公司信息]
+${JSON.stringify(company, null, 2)}
+
+[对话记录]
+
+[待办事项]
+`;
+            writeCustomerFile(company.id || company.companyId || company_name || '', fileContent);
+            
+            return {
+              success: true,
+              message: `搜索完成，找到 ${count} 家公司，已自动保存到客户档案`,
+              data: { ...result, archiveId },
+            };
+          }
+        }
+        
+        return {
+          success: true,
+          message: `搜索完成，找到 ${count} 家公司`,
+          data: result,
+        };
+      } else {
+        return { success: false, error: '请提供公司名称、关键词或公司ID' };
+      }
+    } catch (error: any) {
+      return { success: false, error: `天眼查查询失败: ${error.message}` };
+    }
+  },
+});
+
+// 10.6 天眼查批量搜索+社保筛选+自动归档
+toolRegistry.register({
+  name: 'tianyancha_batch_search',
+  description: '批量搜索企业并按社保人数筛选，支持按城市、行业、关键词搜索，自动获取社保人数并筛选符合条件的公司，可自动归档到客户档案。例如：搜索成都社保人数超过20人的科技企业，找5家。',
+  category: '搜索',
+  riskLevel: 'safe',
+  requiresApproval: false,
+  parameters: [
+    { name: 'city', type: 'string', description: '城市名称（如：成都、北京、上海）', required: true },
+    { name: 'keyword', type: 'string', description: '搜索关键词（如：科技、餐饮、教育）', required: false },
+    { name: 'industry', type: 'string', description: '行业名称（如：科技推广和应用服务业）', required: false },
+    { name: 'min_social_staff_num', type: 'number', description: '最小社保人数（默认20）', required: false, default: 20 },
+    { name: 'max_results', type: 'number', description: '最多返回多少家符合条件的企业（默认5）', required: false, default: 5 },
+    { name: 'save_to_archive', type: 'boolean', description: '是否自动保存到客户档案（默认true）', required: false, default: true },
+  ],
+  executor: async (params) => {
+    const {
+      city,
+      keyword,
+      industry,
+      min_social_staff_num = 20,
+      max_results = 5,
+      save_to_archive = true,
+    } = params;
+
+    try {
+      const { batchSearchAndArchive } = await import('../../lib/tianyanchaMCPClient');
+
+      const result = await batchSearchAndArchive({
+        city,
+        keyword,
+        industry,
+        minSocialStaffNum: min_social_staff_num,
+        maxResults: max_results,
+        saveToArchive: save_to_archive,
+      });
+
+      if (!result.success) {
+        return { success: false, error: result.message };
+      }
+
+      // 格式化输出
+      const companyList = result.companies.map(c => ({
+        name: c.company.name,
+        creditCode: c.company.creditCode,
+        legalPerson: c.company.legalPersonName,
+        socialStaffNum: c.company.socialStaffNum,
+        staffNumRange: c.company.staffNumRange,
+        regCapital: c.company.regCapital,
+        industry: c.company.industry,
+        regStatus: c.company.regStatus,
+        address: c.company.regLocation || c.company.city,
+        phone: c.company.phoneNumber,
+        archived: c.archived,
+      }));
+
+      return {
+        success: true,
+        message: result.message,
+        data: {
+          totalSearched: result.totalSearched,
+          qualifiedCount: result.qualifiedCount,
+          archivedCount: result.archivedCount,
+          companies: companyList,
+          errors: result.errors?.length > 0 ? result.errors : undefined,
+        },
+      };
+    } catch (error: any) {
+      return { success: false, error: `批量搜索失败: ${error.message}` };
+    }
+  },
+});
+
 // 11. 生成文档（保留）
 toolRegistry.register({
   name: 'generate_document',
