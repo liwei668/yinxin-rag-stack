@@ -24,22 +24,9 @@ export default function MessageActions({
   const [isPlaying, setIsPlaying] = useState(false)
   const [showMore, setShowMore] = useState(false)
   const [isRefreshing, setIsRefreshing] = useState(false)
-  const [isVisible, setIsVisible] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
   const [audioProgress, setAudioProgress] = useState<{ current: number; total: number } | null>(null)
   const moreRef = useRef<HTMLDivElement>(null)
-  const containerRef = useRef<HTMLDivElement>(null)
   const isPlayingRef = useRef(false)
-
-  // 检测是否为移动端
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768 || 'ontouchstart' in window)
-    }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
-    return () => window.removeEventListener('resize', checkMobile)
-  }, [])
 
   // 点击外部关闭更多菜单
   useEffect(() => {
@@ -136,47 +123,13 @@ export default function MessageActions({
     }
   }
 
-  // 处理容器点击（移动端显示按钮）
-  const handleContainerClick = () => {
-    if (isMobile) {
-      setIsVisible(!isVisible)
-    }
-  }
-
-  // 处理鼠标进入（桌面端显示按钮）
-  const handleMouseEnter = () => {
-    if (!isMobile) {
-      setIsVisible(true)
-    }
-  }
-
-  // 处理鼠标离开（桌面端隐藏按钮）
-  const handleMouseLeave = () => {
-    if (!isMobile) {
-      setIsVisible(false)
-    }
-  }
-
   return (
-    <div 
-      ref={containerRef}
-      className="relative mt-2"
-      onClick={handleContainerClick}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-    >
-      {/* 移动端提示文字 */}
-      {isMobile && !isVisible && (
-        <span className="text-xs text-gray-400 cursor-pointer select-none">
-          点击显示操作
-        </span>
-      )}
-      
-      {/* 操作按钮组 */}
-      <div className={`flex items-center gap-1 transition-all duration-200 ${isVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}>
+    <div className="relative mt-2">
+      {/* 操作按钮组 - 始终显示 */}
+      <div className="flex items-center gap-1">
         {/* 复制 */}
         <button
-          onClick={(e) => { e.stopPropagation(); handleCopy(); }}
+          onClick={handleCopy}
           className="p-1.5 hover:bg-gray-100 rounded-md transition-colors"
           title="复制"
           aria-label="复制"
@@ -186,7 +139,7 @@ export default function MessageActions({
 
         {/* 播放/暂停 */}
         <button
-          onClick={(e) => { e.stopPropagation(); handlePlay(); }}
+          onClick={handlePlay}
           className={`p-1.5 rounded-md transition-colors ${isPlaying ? 'bg-blue-100' : 'hover:bg-gray-100'} relative`}
           title={isPlaying ? '暂停' : '播放'}
           aria-label={isPlaying ? '暂停' : '播放'}
@@ -206,7 +159,7 @@ export default function MessageActions({
 
         {/* 刷新 */}
         <button
-          onClick={(e) => { e.stopPropagation(); handleRefresh(); }}
+          onClick={handleRefresh}
           disabled={isRefreshing}
           className={`p-1.5 hover:bg-gray-100 rounded-md transition-colors ${isRefreshing ? 'opacity-50' : ''}`}
           title="重新生成"
@@ -218,7 +171,7 @@ export default function MessageActions({
         {/* 更多 */}
         <div className="relative" ref={moreRef}>
           <button
-            onClick={(e) => { e.stopPropagation(); setShowMore(!showMore); }}
+            onClick={() => setShowMore(!showMore)}
             className="p-1.5 hover:bg-gray-100 rounded-md transition-colors"
             title="更多"
             aria-label="更多"

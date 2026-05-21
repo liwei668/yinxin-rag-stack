@@ -51,23 +51,6 @@
     "remark": "阿里云通义千问 API"
   },
   {
-    "api_id": "ollama-local",
-    "name": "Ollama 本地",
-    "type": "LLM",
-    "baseUrl": "http://localhost:11434",
-    "apiKey": "",
-    "timeout": 60000,
-    "proxyEnabled": false,
-    "proxyUrl": "",
-    "headers": [],
-    "requestPrefix": "",
-    "retryCount": 0,
-    "retryOnTimeout": false,
-    "maxQPS": 5,
-    "isActive": true,
-    "remark": "Ollama 本地模型服务"
-  },
-  {
     "api_id": "sina-finance",
     "name": "新浪股票接口",
     "type": "LLM",
@@ -174,7 +157,7 @@
     "name": "阿里云向量模型",
     "type": "Embedding",
     "baseUrl": "https://dashscope.aliyuncs.com/compatible-mode/v1/embeddings",
-    "apiKey": "sk-237b5a8ea8ca4fbc92fab068d567b323",
+    "apiKey": "sk-1****b537",
     "timeout": 30000,
     "isActive": true,
     "remark": "阿里云百炼Embedding API",
