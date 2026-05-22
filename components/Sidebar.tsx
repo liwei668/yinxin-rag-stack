@@ -218,7 +218,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onConversationSe
   return (
     <>
       <div className={`h-full transition-all duration-300 flex-shrink-0 ${collapsed ? 'w-0 opacity-0' : 'w-[300px] opacity-100'}`} style={{ overflow: collapsed ? 'hidden' : 'auto' }}>
-        <div className="h-full glass rounded-r-2xl border-r border-white/20 shadow-lg flex flex-col">
+        <div className="h-full bg-white rounded-r-2xl border-r border-gray-200 shadow-lg flex flex-col">
           
           {/* 用户信息区域 - 最顶端 */}
           <div className="px-4 pt-4 pb-2 flex-shrink-0">
