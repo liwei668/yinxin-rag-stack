@@ -5,6 +5,7 @@ import { promises as fs } from 'fs'
 import path from 'path'
 import { retrieveKnowledge } from './knowledgeRetrieval'
 import { getEmailContext, updateEmailContext, initContextTable } from './emailContext'
+import { promptDb } from '../prompts/database'
 
 interface EmailInfo {
   fromAddress: string
@@ -30,7 +31,6 @@ interface AIConfig {
   auto_reply_review_required: boolean
 }
 
-const PROMPTS_PATH = path.join(process.cwd(), 'data', 'prompts.json')
 const APIS_PATH = path.join(process.cwd(), 'data', 'apis.json')
 
 async function getApiKey(): Promise<string> {
@@ -49,9 +49,8 @@ async function getApiKey(): Promise<string> {
 
 async function getSystemPrompt(): Promise<string> {
   try {
-    const data = await fs.readFile(PROMPTS_PATH, 'utf8')
-    const prompts = JSON.parse(data)
-    const defaultPrompt = prompts.find((p: any) => p.isDefault || p.isDefault === true)
+    // 从 SQLite 读取默认提示词
+    const defaultPrompt = promptDb.getDefaultTemplate()
     if (defaultPrompt && defaultPrompt.content) {
       console.log('✅ 加载提词器成功:', defaultPrompt.name)
       return defaultPrompt.content
@@ -59,7 +58,7 @@ async function getSystemPrompt(): Promise<string> {
   } catch (error) {
     console.log('加载提词器失败，使用默认提示词')
   }
-  
+
   return `你是"露丝"，引信（中国）技术有限公司的全能AI顾问。
 
 你具备多重专业能力，可以根据用户的具体需求灵活切换角色：

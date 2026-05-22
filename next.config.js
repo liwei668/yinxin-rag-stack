@@ -27,9 +27,9 @@ export default {
     '10.0.0.100',
   ],
   devIndicators: false,
-  serverExternalPackages: ['mongoose', 'playwright', 'better-sqlite3'],
+  serverExternalPackages: ['mongoose', 'better-sqlite3'],
   typescript: {
-    ignoreBuildErrors: true,
+    ignoreBuildErrors: false,
   },
   // Turbopack 配置：处理 noVNC 等 CommonJS 模块
   turbopack: {

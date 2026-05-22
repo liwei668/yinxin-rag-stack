@@ -90,19 +90,19 @@ export default function LogManagement() {
   };
   const savedFilters = getSavedFilters();
 
-  const [date, setDate] = useState(savedFilters?.date || new Date().toISOString().split('T')[0]);
+  // 日期始终使用当天，不从 localStorage 恢复
+  const [date, setDate] = useState(new Date().toISOString().split('T')[0]);
   const [levels, setLevels] = useState<LogLevel[]>(savedFilters?.levels || ['ERROR', 'WARN', 'FATAL']);
   const [modules, setModules] = useState<LogModule[]>(savedFilters?.modules || []);
   const [search, setSearch] = useState(savedFilters?.search || '');
   const [taskId, setTaskId] = useState(savedFilters?.taskId || '');
 
-  // 保存筛选条件到 localStorage
+  // 保存筛选条件到 localStorage（不保存日期，日期始终为当天）
   const saveFilters = (updates: Record<string, any>) => {
     if (typeof window === 'undefined') return;
     try {
       const current = getSavedFilters() || {};
       const filters = {
-        date: updates.date ?? current.date ?? new Date().toISOString().split('T')[0],
         levels: updates.levels ?? current.levels ?? ['ERROR', 'WARN', 'FATAL'],
         modules: updates.modules ?? current.modules ?? [],
         search: updates.search ?? current.search ?? '',
@@ -455,7 +455,7 @@ export default function LogManagement() {
           <input
             type="date"
             value={date}
-            onChange={(e) => { const v = e.target.value; setDate(v); saveFilters({ date: v }); setPage(1); }}
+            onChange={(e) => { setDate(e.target.value); setPage(1); }}
             className="px-2 py-1 border border-gray-300 rounded text-sm"
           />
 
@@ -530,9 +530,9 @@ export default function LogManagement() {
             <select
               value={refreshInterval}
               onChange={(e) => { const v = Number(e.target.value); setRefreshInterval(v); saveFilters({ refreshInterval: v }); }}
-              disabled={!autoRefresh}
               className="px-1 py-0.5 border border-gray-300 rounded text-xs"
             >
+              <option value={30}>30秒</option>
               <option value={60}>1分钟</option>
               <option value={300}>5分钟</option>
               <option value={600}>10分钟</option>

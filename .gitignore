@@ -204,3 +204,12 @@ ios/
 *.apk
 *.ipa
 *.aab
+data/agent-logs/*.jsonl
+data/accounting/*.db-wal
+data/accounting/*.db-shm
+data/email-marketing/*.db-wal
+data/email-marketing/*.db-shm
+data/prompts.db-wal
+data/prompts.db-shm
+data/agent-logs/
+data/agent-logs/

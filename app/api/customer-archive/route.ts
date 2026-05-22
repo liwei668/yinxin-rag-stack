@@ -21,8 +21,45 @@ export async function GET(request: NextRequest) {
   const action = searchParams.get('action');
 
   if (action === 'list') {
-    const customers = customerArchiveStore.getAll();
-    return NextResponse.json({ success: true, customers });
+    const page = parseInt(searchParams.get('page') || '1');
+    const pageSize = parseInt(searchParams.get('pageSize') || '20');
+    const search = searchParams.get('search') || '';
+    const status = searchParams.get('status') || 'all';
+
+    // 获取所有客户
+    let customers = customerArchiveStore.getAll();
+
+    // 状态筛选
+    if (status !== 'all') {
+      customers = customers.filter((c: any) => c.status === status);
+    }
+
+    // 搜索筛选
+    if (search) {
+      const searchLower = search.toLowerCase();
+      customers = customers.filter((c: any) =>
+        c.companyName?.toLowerCase().includes(searchLower) ||
+        c.contactName?.toLowerCase().includes(searchLower) ||
+        c.contactEmail?.toLowerCase().includes(searchLower) ||
+        c.customerId?.toLowerCase().includes(searchLower)
+      );
+    }
+
+    // 计算总数
+    const total = customers.length;
+
+    // 分页
+    const start = (page - 1) * pageSize;
+    const pagedCustomers = customers.slice(start, start + pageSize);
+
+    return NextResponse.json({ 
+      success: true, 
+      customers: pagedCustomers,
+      total,
+      page,
+      pageSize,
+      totalPages: Math.ceil(total / pageSize)
+    });
   }
 
   if (action === 'loadFile') {
@@ -30,6 +67,41 @@ export async function GET(request: NextRequest) {
     if (!customerId) return NextResponse.json({ success: false, error: '缺少客户ID' });
     const content = readCustomerFile(customerId);
     return NextResponse.json({ success: true, content });
+  }
+
+  // 导出 CSV
+  if (action === 'export') {
+    const customers = customerArchiveStore.getAll();
+    
+    // CSV 表头
+    const headers = ['客户ID', '公司名称', '联系人', '联系电话', '邮箱', '行业', '状态', '标签', '创建时间', '更新时间'];
+    
+    // CSV 内容
+    const rows = customers.map((c: any) => [
+      c.customerId || '',
+      c.companyName || '',
+      c.contactName || '',
+      c.contactPhone || '',
+      c.contactEmail || '',
+      c.industry || '',
+      c.status === 'active' ? '活跃' : '非活跃',
+      (c.tags || []).join('; '),
+      c.createdAt || '',
+      c.updatedAt || ''
+    ]);
+
+    // 组装 CSV（使用 BOM 支持中文）
+    const BOM = '\uFEFF';
+    const csv = BOM + headers.join(',') + '\n' + rows.map(row => 
+      row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(',')
+    ).join('\n');
+
+    return new NextResponse(csv, {
+      headers: {
+        'Content-Type': 'text/csv; charset=utf-8',
+        'Content-Disposition': `attachment; filename="customers-${new Date().toISOString().split('T')[0]}.csv"`,
+      },
+    });
   }
 
   return NextResponse.json({ success: true });

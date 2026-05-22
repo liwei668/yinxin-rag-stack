@@ -1,5 +1,47 @@
 [
   {
+    "id": "log-1779374060154-zo7rra7at",
+    "timestamp": "2026-05-21T14:34:20.154Z",
+    "type": "delete",
+    "entityType": "kb",
+    "entityId": "kb-1779374055712-8mla1ozsg",
+    "entityName": "213123",
+    "before": {
+      "id": "kb-1779374055712-8mla1ozsg",
+      "name": "213123",
+      "parentId": null,
+      "level": 0,
+      "isVirtual": false,
+      "visibility": "private",
+      "isArchived": false,
+      "version": 1,
+      "createdAt": "2026-05-21T14:34:15.712Z",
+      "updatedAt": "2026-05-21T14:34:15.712Z"
+    },
+    "userId": "default-user"
+  },
+  {
+    "id": "log-1779374055779-5ztv4k402",
+    "timestamp": "2026-05-21T14:34:15.779Z",
+    "type": "create",
+    "entityType": "kb",
+    "entityId": "kb-1779374055712-8mla1ozsg",
+    "entityName": "213123",
+    "after": {
+      "id": "kb-1779374055712-8mla1ozsg",
+      "name": "213123",
+      "parentId": null,
+      "level": 0,
+      "isVirtual": false,
+      "visibility": "private",
+      "isArchived": false,
+      "version": 1,
+      "createdAt": "2026-05-21T14:34:15.712Z",
+      "updatedAt": "2026-05-21T14:34:15.712Z"
+    },
+    "userId": "default-user"
+  },
+  {
     "id": "log-1779111832075-v5v0tnhlu",
     "timestamp": "2026-05-18T13:43:52.075Z",
     "type": "create",

@@ -278,22 +278,22 @@ async function convertToDOCX(content: string, outputPath: string): Promise<void>
   fs.writeFileSync(outputPath, buffer);
 }
 
-// ==================== PDF 导出（Playwright）====================
+// ==================== PDF 导出（HTML转PDF）====================
 
 async function convertToPDF(content: string, outputPath: string): Promise<void> {
-  let browser;
-  try {
-    const { chromium } = await import('playwright');
+  // 使用纯HTML方案，依赖浏览器打印功能或外部PDF服务
+  marked.setOptions({ gfm: true, breaks: true, headerIds: false });
+  const htmlBody = marked.parse(content) as string;
 
-    marked.setOptions({ gfm: true, breaks: true, headerIds: false });
-    const htmlBody = marked.parse(content) as string;
-
-    const fullHTML = `<!DOCTYPE html>
+  const fullHTML = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
   <title>导出文档</title>
   <style>
+    @media print {
+      body { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+    }
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans SC", sans-serif;
       line-height: 1.8;
@@ -339,20 +339,30 @@ async function convertToPDF(content: string, outputPath: string): Promise<void> 
 <body>${htmlBody}</body>
 </html>`;
 
-    browser = await chromium.launch({ headless: true });
-    const page = await browser.newPage();
-    await page.setContent(fullHTML, { waitUntil: 'networkidle' });
+  // 保存HTML文件，用户可通过浏览器打印为PDF
+  const htmlPath = outputPath.replace('.pdf', '.html');
+  fs.writeFileSync(htmlPath, fullHTML);
+  
+  // 创建一个简单的PDF占位文件（提示用户使用浏览器打印）
+  const readmeContent = `PDF导出已改为HTML格式。
 
-    const pdfBuffer = await page.pdf({
-      format: 'A4',
-      printBackground: true,
-      margin: { top: '20mm', right: '20mm', bottom: '20mm', left: '20mm' },
-    });
+请打开以下文件，使用浏览器的"打印"功能（Ctrl+P / Cmd+P），选择"另存为PDF"：
+${path.basename(htmlPath)}
 
-    fs.writeFileSync(outputPath, pdfBuffer);
-  } finally {
-    if (browser) await browser.close();
-  }
+提示：
+1. 在打印设置中选择"另存为PDF"
+2. 纸张大小选择 A4
+3. 边距选择"默认"或"20mm"
+4. 勾选"背景图形"以保留颜色
+
+如需自动化PDF生成，建议：
+- 部署独立的PDF生成服务（如 puppeteer/chrome-headless）
+- 或使用第三方API（如 PDFShift、DocRaptor）
+`;
+  fs.writeFileSync(outputPath.replace('.pdf', '.txt'), readmeContent);
+  
+  // 同时返回HTML文件路径
+  logger.info('SYSTEM', 'PDF export converted to HTML', { extra: { htmlPath } });
 }
 
 // ==================== Excel 导出 ====================

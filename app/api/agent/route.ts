@@ -11,51 +11,14 @@ import {
 import { toolRegistry } from '../../../src/services/agent/toolRegistry';
 import { permissionController } from '../../../src/services/agent/permissionController';
 import { agentEvolution } from '../../../src/services/agent/agentEvolution';
-import { browserManagerFactory } from '../../../src/services/agent/browserManagerFactory';
 import { logger } from '../../../src/lib/logger';
-
-// AI 新动作名 → 现有 toolName 映射
-function mapActionName(action: string): string {
-  const map: Record<string, string> = {
-    goto: 'browser_navigate', click: 'browser_click', input: 'browser_type',
-    press: 'browser_press', scroll: 'browser_scroll', wait: 'browser_wait',
-    closePopup: 'browser_click', select: 'browser_select', readPage: 'browser_read',
-    switchTab: 'browser_tab',
-  };
-  return map[action] || action;
-}
-
-// 从 data URI 或纯 base64 中提取纯 base64 数据
-function extractBase64(data: string): string {
-  if (!data || typeof data !== 'string') return data;
-  // 去除 data:image/png;base64, 前缀
-  if (data.startsWith('data:')) {
-    const commaIndex = data.indexOf(',');
-    if (commaIndex >= 0) return data.substring(commaIndex + 1);
-  }
-  return data;
-}
 
 // 安全序列化 task 对象，去除不可序列化的内容
 function safeSerialize(task: any) {
   if (!task) return task;
-  const screenshotsDir = path.join(process.cwd(), 'data', 'screenshots');
-  if (!fs.existsSync(screenshotsDir)) {
-    fs.mkdirSync(screenshotsDir, { recursive: true });
-  }
   
-  // 注意：不再序列化 task.screenshots 数组，因为 step.screenshot 已经包含每个步骤的截图
-  // task.screenshots 中的原始 base64 数据会导致 SSE 负载过大
-  // task.result.screenshots 也需要清空，同理
-  const result = task.result ? {
-    ...task.result,
-    screenshots: [], // 清空 result 中的截图 base64
-  } : task.result;
-
   return {
     ...task,
-    screenshots: [], // 清空，避免 base64 数据污染 SSE 负载
-    result,
     logs: (task.logs || []).map((log: any) => ({
       ...log,
       message: (log.message || '').replace(/[\x00-\x1f]/g, ''),
@@ -64,23 +27,6 @@ function safeSerialize(task: any) {
       ...step,
       description: (step.description || '').replace(/[\x00-\x1f]/g, ''),
       error: (step.error || '').replace(/[\x00-\x1f]/g, ''),
-      screenshot: step.screenshot ? (() => {
-        try {
-          // 如果已经是 URL 路径，直接使用
-          if (typeof step.screenshot === 'string' && step.screenshot.startsWith('/')) return step.screenshot;
-          const filename = `${task.id}_step_${step.index}.png`;
-          const filepath = path.join(screenshotsDir, filename);
-          // 提取纯 base64（去除 data:image/png;base64, 前缀）
-          const rawBase64 = extractBase64(step.screenshot);
-          const buffer = Buffer.from(rawBase64, 'base64');
-          fs.writeFileSync(filepath, buffer);
-          console.log(`[safeSerialize] 截图已写入: ${filename} (${buffer.length} bytes)`);
-          return `/api/agent/screenshots/${filename}`;
-        } catch (err) {
-          logger.error('SYSTEM', '`[safeSerialize] 截图处理失败:`', { extra: { error: String(err) } });
-          return undefined;
-        }
-      })() : undefined,
     })),
   };
 }
@@ -102,7 +48,7 @@ export async function POST(request: NextRequest) {
           task.plan = presetPlan.map((s: any, i: number) => ({
             id: uuidv4(),
             index: i,
-            toolName: mapActionName(s.toolName || s.action || ''),
+            toolName: s.toolName || s.action || '',
             title: s.title || s.description || `步骤 ${i + 1}`,
             description: s.description || s.reasoning || '',
             toolParams: s.toolParams || s.params || {},
@@ -132,20 +78,20 @@ export async function POST(request: NextRequest) {
 
       case 'pause': {
         if (!taskId) return NextResponse.json({ error: '缺少 taskId' }, { status: 400 });
-        const task = pauseTask(taskId);
+        const task = await pauseTask(taskId);
         return NextResponse.json({ success: true, task: safeSerialize(task) });
       }
 
       case 'resume': {
         if (!taskId) return NextResponse.json({ error: '缺少 taskId' }, { status: 400 });
         const instruction = body.instruction as string | undefined;
-        const task = resumeTask(taskId, instruction);
+        const task = await resumeTask(taskId, instruction);
         return NextResponse.json({ success: true, task: safeSerialize(task) });
       }
 
       case 'cancel': {
         if (!taskId) return NextResponse.json({ error: '缺少 taskId' }, { status: 400 });
-        const task = cancelTask(taskId);
+        const task = await cancelTask(taskId);
         return NextResponse.json({ success: true, task: safeSerialize(task) });
       }
 
@@ -220,10 +166,14 @@ export async function GET(request: NextRequest) {
       }
 
       case 'profile': {
-        const profileUserId = userId || 'anonymous';
-        const bm = await browserManagerFactory.getManager(profileUserId);
-        const info = bm.getProfileInfo();
-        return NextResponse.json({ success: true, profile: info });
+        // 浏览器自动化已移除，返回空配置
+        return NextResponse.json({ 
+          success: true, 
+          profile: { 
+            note: '浏览器自动化功能已移除',
+            availableTools: toolRegistry.getAllDefinitions().map(t => t.name)
+          } 
+        });
       }
 
       case 'subscribe': {

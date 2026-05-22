@@ -11,8 +11,7 @@ import { VoiceBroadcastProvider } from '../src/contexts/VoiceBroadcastContext'
 const DocumentUpload = React.lazy(() => import('../src/components/rag/DocumentUpload'))
 const KnowledgeBaseV3 = React.lazy(() => import('../src/components/rag/KnowledgeBaseV3'))
 const AccountingPanel = React.lazy(() => import('../components/accounting/AccountingPanel'))
-const AgentTaskPanel = React.lazy(() => import('../src/components/agent/AgentTaskPanel'))
-const WorkspacePanel = React.lazy(() => import('../src/components/agent/WorkspacePanel'))
+
 const EmailMarketingPanel = React.lazy(() => import('../components/email-marketing/EmailMarketingPanel'))
 import { Globe, FileText, Code, X, PanelLeft, PanelLeftClose, MessageSquare } from 'lucide-react'
 import ErrorBoundary from '../components/ErrorBoundary'
@@ -86,38 +85,9 @@ const Home: React.FC = () => {
   const [conversations, setConversations] = useState<Conversation[]>([])
   const [currentConversationId, setCurrentConversationId] = useState<string | null>(null)
   const [showKnowledgeBase, setShowKnowledgeBase] = useState(false)
-  const [showAgentPanel, setShowAgentPanel] = useState(false)
-  const [activeAgentQuestion, setActiveAgentQuestion] = useState<string | null>(null)
-  const [showAgentWorkspace, setShowAgentWorkspace] = useState(false)
-  const [activeAgentTaskId, setActiveAgentTaskId] = useState<string | null>(null)
-  const [agentWorkspaceWidth, setAgentWorkspaceWidth] = useState(60) // 浏览器面板占百分比（默认60%）
-  const [isResizing, setIsResizing] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [conversationToDelete, setConversationToDelete] = useState<string | null>(null)
   const [messageToBroadcast, setMessageToBroadcast] = useState<string | null>(null)
-
-  // 监听 Agent 请求人工介入事件
-  useEffect(() => {
-    const handleHumanRequest = (e: any) => {
-      if (e.detail?.question) {
-        setActiveAgentQuestion(e.detail.question);
-      }
-    };
-    window.addEventListener('agent-human-request', handleHumanRequest);
-    return () => window.removeEventListener('agent-human-request', handleHumanRequest);
-  }, []);
-
-  // 监听 Agent 任务执行事件，自动打开工作区
-  useEffect(() => {
-    const handleAgentTaskStart = (e: any) => {
-      if (e.detail?.taskId) {
-        setActiveAgentTaskId(e.detail.taskId);
-        setShowAgentWorkspace(true);
-      }
-    };
-    window.addEventListener('agent-task-start', handleAgentTaskStart);
-    return () => window.removeEventListener('agent-task-start', handleAgentTaskStart);
-  }, []);
 
   // 监听需要播报的新消息
   useEffect(() => {
@@ -132,41 +102,7 @@ const Home: React.FC = () => {
     }
   }, [messageToBroadcast]);
 
-  // 处理工作区宽度调整
-  const handleMouseDown = (e: React.MouseEvent) => {
-    e.preventDefault();
-    setIsResizing(true);
-  };
 
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!isResizing) return;
-
-    const containerRect = document.querySelector('.flex-1.flex.overflow-hidden.order-2')?.getBoundingClientRect();
-    if (containerRect) {
-      const offsetX = e.clientX - containerRect.left;
-      const percent = (offsetX / containerRect.width) * 100;
-      // 限制：聊天区最小20%，浏览器区最小30%
-      if (percent >= 20 && percent <= 70) {
-        setAgentWorkspaceWidth(percent);
-      }
-    }
-  };
-
-  const handleMouseUp = () => {
-    setIsResizing(false);
-  };
-
-  // 添加全局鼠标事件监听器
-  useEffect(() => {
-    if (isResizing) {
-      window.addEventListener('mousemove', handleMouseMove);
-      window.addEventListener('mouseup', handleMouseUp);
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-        window.removeEventListener('mouseup', handleMouseUp);
-      };
-    }
-  }, [isResizing]);
 
   // 防抖函数
   const debounce = (func: Function, delay: number) => {
@@ -468,10 +404,10 @@ const Home: React.FC = () => {
           />
         </div>
         
-        {/* 主聊天区域 + 浏览器工作区（左右分栏） */}
+        {/* 主聊天区域 */}
         <div className="flex-1 flex overflow-hidden order-2">
           {/* 主聊天区域 */}
-          <div className="flex flex-col overflow-hidden" style={{ width: showAgentWorkspace ? `${100 - agentWorkspaceWidth}%` : '100%', flexShrink: 0 }}>
+          <div className="flex flex-col overflow-hidden w-full">
           <div className="bg-white border-b border-gray-200 py-2 md:py-3 px-4 md:px-6 flex items-center justify-between relative">
             <div className="flex items-center gap-1 md:gap-2">
               <div className="relative group">
@@ -571,12 +507,6 @@ const Home: React.FC = () => {
                       icon={<span className="text-base">📊</span>}
                       onClick={() => router.push('/stocks')}
                     />
-                    <TaskCard
-                      title="Agent引擎"
-                      description="自动执行网页操作"
-                      icon={<img src="/agent-icon.png" alt="Agent" className="w-6 h-6" />}
-                      onClick={() => router.push('/agent')}
-                    />
                   </div>
                 </>
               ) : (
@@ -585,45 +515,10 @@ const Home: React.FC = () => {
                 </div>
               )}
               
-              <TaskInput showAgentPanel={showAgentPanel} onCloseAgentPanel={() => setShowAgentPanel(false)} />
+              <TaskInput />
             </div>
           </div>
           </div>
-          
-          {/* 拖拽分隔条 */}
-          <div
-            className={`w-1.5 cursor-col-resize flex-shrink-0 transition-colors ${isResizing ? 'bg-emerald-400' : 'bg-gray-200 hover:bg-emerald-300'}`}
-            onMouseDown={handleMouseDown}
-            title="拖拽调整宽度"
-          />
-
-          {/* 浏览器工作区面板 */}
-          {showAgentWorkspace && (
-            <div className="flex flex-col overflow-hidden border-l border-gray-200 bg-white" style={{ width: `${agentWorkspaceWidth}%`, flexShrink: 0 }}>
-              {/* 面板头部 */}
-              <div className="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50 flex-shrink-0">
-                <div className="flex items-center gap-2">
-                  <Globe className="w-4 h-4 text-emerald-500" />
-                  <h3 className="font-medium text-gray-800 text-sm">浏览器</h3>
-                </div>
-                <button
-                  onClick={() => setShowAgentWorkspace(false)}
-                  className="p-1 rounded hover:bg-gray-200 text-gray-500"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              </div>
-              {/* 浏览器内容（全高） */}
-              <div className="flex-1 overflow-hidden">
-                <React.Suspense fallback={<div className="flex items-center justify-center h-full text-gray-500">加载浏览器...</div>}>
-                  <WorkspacePanel
-                    onClose={() => setShowAgentWorkspace(false)}
-                    taskId={activeAgentTaskId || undefined}
-                  />
-                </React.Suspense>
-              </div>
-            </div>
-          )}
         </div>
       </div>
       

@@ -52,10 +52,19 @@ const PromptManager = () => {
 
   const fetchTemplates = async () => {
     try {
-      const response = await fetch('/api/prompts?action=list');
+      const response = await fetch('/api/prompts-v2?action=list');
       const result = await response.json();
       if (result.success) {
-        setTemplates(result.templates);
+        // 转换 SQLite 数据格式为组件格式
+        setTemplates(result.templates.map((t: any) => ({
+          ...t,
+          isActive: t.isActive === 1,
+          isDefault: t.isDefault === 1,
+          variables: JSON.parse(t.variables || '[]'),
+          categories: JSON.parse(t.categories || '[]'),
+          associatedKnowledgeDocs: JSON.parse(t.associatedKnowledgeDocs || '[]'),
+          scenario: JSON.parse(t.scenario || '[]'),
+        })));
       }
     } catch (error) {
       console.error('获取模板列表失败:', error);
@@ -178,22 +187,22 @@ const PromptManager = () => {
 
       let response;
       if (currentTemplate) {
-        response = await fetch('/api/prompts', {
+        response = await fetch('/api/prompts-v2', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'update',
             id: currentTemplate.id,
-            templateData
+            ...templateData
           })
         });
       } else {
-        response = await fetch('/api/prompts', {
+        response = await fetch('/api/prompts-v2', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
             action: 'create',
-            templateData
+            ...templateData
           })
         });
       }
@@ -222,7 +231,7 @@ const PromptManager = () => {
   const handleDelete = async (id: string) => {
     if (!confirm('确定删除此模板吗？')) return;
     try {
-      const response = await fetch('/api/prompts', {
+      const response = await fetch('/api/prompts-v2', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'delete', id })
@@ -249,7 +258,7 @@ const PromptManager = () => {
 
   const handleSetDefault = async (id: string) => {
     try {
-      const response = await fetch('/api/prompts', {
+      const response = await fetch('/api/prompts-v2', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ action: 'setDefault', id })

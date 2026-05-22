@@ -11,7 +11,7 @@
     "ttsModel": "qwen3-tts-instruct-flash",
     "asrEngine": "aliyun",
     "asrLanguage": "auto",
-    "voiceName": "Ethan",
+    "voiceName": "Cherry",
     "voiceSpeed": 1.2,
     "asrThreshold": 0.5
   },

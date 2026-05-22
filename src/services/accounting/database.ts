@@ -32,12 +32,18 @@ export async function getDB(): Promise<any> {
       fs.mkdirSync(DB_DIR, { recursive: true });
     }
 
-    db = new DatabaseCtor(DB_PATH);
-    db.pragma('journal_mode = WAL');
-    db.pragma('foreign_keys = ON');
+    try {
+      db = new DatabaseCtor(DB_PATH);
+      db.pragma('journal_mode = WAL');
+      db.pragma('foreign_keys = ON');
 
-    initTables();
-    return db;
+      initTables();
+      return db;
+    } catch (error) {
+      console.error('[Accounting DB] 数据库初始化失败:', error);
+      initPromise = null; // 允许重试
+      throw error;
+    }
   })();
 
   return initPromise;

@@ -13,6 +13,22 @@ if (!fs.existsSync(DATA_DIR)) {
 
 const DB_PATH = path.join(DATA_DIR, 'prompts.db');
 
+let db: Database.Database | null = null;
+
+function getDB(): Database.Database {
+  if (!db) {
+    try {
+      db = new Database(DB_PATH);
+      db.pragma('journal_mode = WAL');
+      console.log('[Prompts DB] 数据库连接成功');
+    } catch (error) {
+      console.error('[Prompts DB] 数据库连接失败:', error);
+      throw error;
+    }
+  }
+  return db;
+}
+
 interface PromptTemplate {
   id: string;
   name: string;

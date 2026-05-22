@@ -333,7 +333,7 @@ const Sidebar: React.FC<SidebarProps> = ({ collapsed, onToggle, onConversationSe
           </div>
           
           {/* 对话历史 - 可滚动区域 */}
-          <div className="flex-1 overflow-y-auto min-h-0">
+          <div className="flex-1 overflow-y-auto min-h-0 sidebar-scroll">
             <div className="px-4 mb-2 pt-2 text-xs font-semibold text-gray-500">对话历史</div>
             <div className="pb-4">
               {sortedConversations.map(renderConversationItem)}

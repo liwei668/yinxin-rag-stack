@@ -49,3 +49,31 @@
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
+
+/* 侧边栏滚动条 - 悬停时显示 */
+.sidebar-scroll {
+  scrollbar-width: thin;
+  scrollbar-color: transparent transparent;
+}
+.sidebar-scroll:hover {
+  scrollbar-color: #d1d5db transparent;
+}
+.sidebar-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: transparent;
+  border-radius: 3px;
+}
+.sidebar-scroll:hover::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+}
+.dark .sidebar-scroll:hover {
+  scrollbar-color: #4b5563 transparent;
+}
+.dark .sidebar-scroll:hover::-webkit-scrollbar-thumb {
+  background: #4b5563;
+}
