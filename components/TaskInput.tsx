@@ -1,6 +1,6 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react'
-import { useChat } from '../app/page'
+import { useChat } from '../src/contexts/ChatContext'
 import { correctSpelling } from '../src/services/spellCorrectionService'
 import { useUser } from '../src/contexts/UserContext'
 import { SpeechService } from '../src/services/textToSpeechService'
@@ -30,10 +30,32 @@ const TaskInput: React.FC<TaskInputProps> = ({ showAgentPanel, onCloseAgentPanel
   const [mtcOpen, setMtcOpen] = useState(false)
   const [mtcConfig, setMtcConfig] = useState<MTCConfig>({ ...MTC_DEFAULT_CONFIG })
   const [mtcTargetContent, setMtcTargetContent] = useState<string | null>(null)
-  const { currentConversation, addMessageToCurrentConversation, conversations, setConversations, currentConversationId } = useChat()
+  const { currentConversation, addMessageToCurrentConversation, conversations, setConversations, currentConversationId, sendMessage } = useChat()
   const { speakText, stopSpeaking, isEnabled: voiceEnabled } = useVoiceBroadcast()
   const accumulatedTextRef = useRef('')
   const streamAbortControllerRef = useRef<AbortController | null>(null)
+
+  // 辅助函数：添加消息并同步到服务器
+  const addMessageAndSync = async (message: { id?: string; role: 'user' | 'assistant'; content: string }) => {
+    const messageWithId = {
+      ...message,
+      id: message.id || crypto.randomUUID(),
+    };
+    
+    // 先更新本地状态（立即显示）
+    addMessageToCurrentConversation(messageWithId);
+    
+    // 然后同步到服务器
+    if (currentConversationId && sendMessage) {
+      try {
+        await sendMessage(currentConversationId, messageWithId);
+      } catch (err) {
+        console.error('同步消息失败:', err);
+      }
+    }
+    
+    return messageWithId.id;
+  };
 
   // 重新生成消息
   const regenerateMessage = async (messageId: string) => {
@@ -182,7 +204,7 @@ const TaskInput: React.FC<TaskInputProps> = ({ showAgentPanel, onCloseAgentPanel
             role: 'user' as const,
             content: correctedContent ? `${correctedContent}\n[图片: ${imageNames}]` : `[图片: ${imageNames}]`
           }
-          addMessageToCurrentConversation(userMessage)
+          await addMessageAndSync(userMessage)
           
           try {
             // 处理所有图片
@@ -224,19 +246,21 @@ const TaskInput: React.FC<TaskInputProps> = ({ showAgentPanel, onCloseAgentPanel
             // 合并所有图片识别结果
             const combinedContent = visionResults.join('\n\n')
             const assistantMessage = {
+              id: crypto.randomUUID(),
               role: 'assistant' as const,
               content: combinedContent
             }
-            addMessageToCurrentConversation(assistantMessage)
+            await addMessageAndSync(assistantMessage)
             setLoading(false)
             return
           } catch (error) {
             console.error('Vision API Error:', error)
             const errorMessage = {
+              id: crypto.randomUUID(),
               role: 'assistant' as const,
               content: `抱歉，图片识别失败：${error instanceof Error ? error.message : '未知错误'}`
             }
-            addMessageToCurrentConversation(errorMessage)
+            await addMessageAndSync(errorMessage)
             setLoading(false)
             return
           }
@@ -279,7 +303,7 @@ const TaskInput: React.FC<TaskInputProps> = ({ showAgentPanel, onCloseAgentPanel
           content: finalContent
         }
         
-        addMessageToCurrentConversation(userMessage)
+        await addMessageAndSync(userMessage)
       } else {
         // 没有文件上传的情况
         userMessage = {
@@ -287,12 +311,12 @@ const TaskInput: React.FC<TaskInputProps> = ({ showAgentPanel, onCloseAgentPanel
           content: correctedContent
         }
         
-        addMessageToCurrentConversation(userMessage)
+        await addMessageAndSync(userMessage)
       }
       // loading 状态已在函数开始时设置
 
       // 尝试使用Agent处理任务
-      const agentHandled = await agentTaskService.handleAgentTask(correctedContent, addMessageToCurrentConversation, user)
+      const agentHandled = await agentTaskService.handleAgentTask(correctedContent, addMessageAndSync, user)
 
       if (!agentHandled) {
         // 正常聊天流程
@@ -441,6 +465,19 @@ const TaskInput: React.FC<TaskInputProps> = ({ showAgentPanel, onCloseAgentPanel
               streamAbortControllerRef.current = null;
             }
             
+            // 流结束后，同步完整消息到服务器
+            if (tempMessageId && currentConversationId) {
+              try {
+                await sendMessage(currentConversationId, {
+                  id: tempMessageId,
+                  role: 'assistant',
+                  content: accumulatedTextRef.current
+                });
+              } catch (err) {
+                console.error('同步AI回复失败:', err);
+              }
+            }
+            
             // 流结束后，如果启用了语音播报，停止
             if (voiceEnabled) {
               // 留一小段时间让最后的语音播放完
@@ -452,7 +489,7 @@ const TaskInput: React.FC<TaskInputProps> = ({ showAgentPanel, onCloseAgentPanel
             role: 'assistant' as const,
             content: `抱歉，${error instanceof Error ? error.message : '请求处理失败，请稍后再试。'}`
           }
-          addMessageToCurrentConversation(errorMessage)
+          await addMessageAndSync(errorMessage)
         } finally {
           setLoading(false)
         }

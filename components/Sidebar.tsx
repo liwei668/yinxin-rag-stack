@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useMemo, useCallback } from 'react'
 import { Plus, Code, ChevronLeft, ChevronRight, MessageSquare, Trash2, MoreHorizontal, Pin, PinOff, Edit3, Settings, Info, LogOut, Camera, ChevronDown } from 'lucide-react'
-import { useChat } from '../app/page'
+import { useChat } from '../src/contexts/ChatContext'
 import { useUser } from '../src/contexts/UserContext'
 import AboutModal from './AboutModal'
 

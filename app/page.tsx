@@ -1,5 +1,5 @@
 'use client';
-import React, { useState, createContext, useContext, useEffect, useMemo, useCallback } from 'react'
+import React, { useState, useEffect, useMemo, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import Sidebar from '../components/Sidebar'
 import TopBar from '../components/TopBar'
@@ -16,6 +16,8 @@ const EmailMarketingPanel = React.lazy(() => import('../components/email-marketi
 import { Globe, FileText, Code, X, PanelLeft, PanelLeftClose, MessageSquare } from 'lucide-react'
 import ErrorBoundary from '../components/ErrorBoundary'
 import { useUser } from '../src/contexts/UserContext'
+import { useConversations } from '../src/hooks/useConversations'
+import { ChatContext, ChatContextType, Message, Conversation } from '../src/contexts/ChatContext'
 
 /** 获取当前用户 ID（与 AgentControlPanel 一致） */
 function getDefaultUserId(): string {
@@ -25,44 +27,6 @@ function getDefaultUserId(): string {
     if (raw) { const user = JSON.parse(raw); if (user?.id) return user.id; }
   } catch {}
   return 'anonymous'
-}
-
-interface Message {
-  id: string
-  role: 'user' | 'assistant'
-  content: string
-}
-
-interface Conversation {
-  id: string
-  title: string
-  messages: Message[]
-  createdAt: Date
-  pinned?: boolean
-  pinnedAt?: Date
-}
-
-interface ChatContextType {
-  conversations: Conversation[]
-  currentConversationId: string | null
-  createNewConversation: () => void
-  selectConversation: (id: string) => void
-  deleteConversation: (id: string) => void
-  currentConversation: Conversation | null
-  addMessageToCurrentConversation: (message: Message) => void
-  togglePinConversation: (id: string) => void
-  renameConversation: (id: string, newTitle: string) => void
-  setConversations: React.Dispatch<React.SetStateAction<Conversation[]>>
-}
-
-const ChatContext = createContext<ChatContextType | undefined>(undefined)
-
-export const useChat = () => {
-  const context = useContext(ChatContext)
-  if (!context) {
-    throw new Error('useChat must be used within a ChatProvider')
-  }
-  return context
 }
 
 const Home: React.FC = () => {
@@ -82,12 +46,24 @@ const Home: React.FC = () => {
   const [showVideo, setShowVideo] = useState(false)
   const [showEmailMarketing, setShowEmailMarketing] = useState(false)
   const [emailMarketingHasNotification, setEmailMarketingHasNotification] = useState(false)
-  const [conversations, setConversations] = useState<Conversation[]>([])
-  const [currentConversationId, setCurrentConversationId] = useState<string | null>(null)
   const [showKnowledgeBase, setShowKnowledgeBase] = useState(false)
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false)
   const [conversationToDelete, setConversationToDelete] = useState<string | null>(null)
   const [messageToBroadcast, setMessageToBroadcast] = useState<string | null>(null)
+
+  // 使用云端同步的 conversations hook
+  const {
+    conversations,
+    setConversations,
+    currentConversation,
+    currentConversationId,
+    createConversation,
+    deleteConversation: deleteConversationFromServer,
+    togglePin,
+    renameConversation,
+    selectConversation,
+    sendMessage,
+  } = useConversations()
 
   // 监听需要播报的新消息
   useEffect(() => {
@@ -101,68 +77,6 @@ const Home: React.FC = () => {
       setMessageToBroadcast(null);
     }
   }, [messageToBroadcast]);
-
-
-
-  // 防抖函数
-  const debounce = (func: Function, delay: number) => {
-    let timeoutId: NodeJS.Timeout
-    return (...args: any[]) => {
-      clearTimeout(timeoutId)
-      timeoutId = setTimeout(() => func.apply(null, args), delay)
-    }
-  }
-
-  // 防抖处理的localStorage操作
-  const debouncedSaveConversations = useCallback(
-    debounce((conv: Conversation[]) => {
-      if (typeof window !== 'undefined') {
-        localStorage.setItem('yinxin_agl_conversations', JSON.stringify(conv))
-      }
-    }, 500),
-    []
-  )
-
-  const debouncedSaveCurrentConversation = useCallback(
-    debounce((id: string | null) => {
-      if (typeof window !== 'undefined') {
-        if (id) {
-          localStorage.setItem('yinxin_agl_current_conversation', id)
-        } else {
-          localStorage.removeItem('yinxin_agl_current_conversation')
-        }
-      }
-    }, 500),
-    []
-  )
-
-  // 仅在客户端加载数据
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const saved = localStorage.getItem('yinxin_agl_conversations')
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved)
-          // 兼容旧数据：给没有 id 的消息自动补 id
-          setConversations(parsed.map((conv: any) => ({
-            ...conv,
-            createdAt: new Date(conv.createdAt),
-            messages: (conv.messages || []).map((msg: any) => ({
-              ...msg,
-              id: msg.id || crypto.randomUUID()
-            }))
-          })))
-        } catch (e) {
-          console.error('Failed to parse conversations:', e)
-        }
-      }
-      
-      const currentId = localStorage.getItem('yinxin_agl_current_conversation')
-      if (currentId) {
-        setCurrentConversationId(currentId)
-      }
-    }
-  }, [])
 
   // 监听路由变化，当从其他页面返回时重新获取用户信息
   useEffect(() => {
@@ -180,80 +94,42 @@ const Home: React.FC = () => {
     }
   }, [])
 
-  useEffect(() => {
-    debouncedSaveConversations(conversations)
-  }, [conversations, debouncedSaveConversations])
+  const createNewConversation = useCallback(async () => {
+    await createConversation()
+  }, [createConversation])
 
-  useEffect(() => {
-    debouncedSaveCurrentConversation(currentConversationId)
-  }, [currentConversationId, debouncedSaveCurrentConversation])
-
-  const createNewConversation = useCallback(() => {
-    const newConversation: Conversation = {
-      id: Date.now().toString(),
-      title: '新对话',
-      messages: [],
-      createdAt: new Date()
-    }
-    setConversations(prev => [newConversation, ...prev])
-    setCurrentConversationId(newConversation.id)
-  }, [])
-
-  const selectConversation = useCallback((id: string) => {
-    setCurrentConversationId(id)
-  }, [])
-
-  const deleteConversation = useCallback((id: string) => {
+  const handleDeleteConversation = useCallback((id: string) => {
     setConversationToDelete(id)
     setShowDeleteConfirm(true)
   }, [])
 
-  const confirmDeleteConversation = useCallback(() => {
+  const confirmDeleteConversation = useCallback(async () => {
     if (conversationToDelete) {
-      setConversations(prev => prev.filter(conv => conv.id !== conversationToDelete))
-      if (currentConversationId === conversationToDelete) {
-        setCurrentConversationId(null)
-      }
+      await deleteConversationFromServer(conversationToDelete)
       setShowDeleteConfirm(false)
       setConversationToDelete(null)
     }
-  }, [conversationToDelete, currentConversationId])
+  }, [conversationToDelete, deleteConversationFromServer])
 
   const cancelDeleteConversation = useCallback(() => {
     setShowDeleteConfirm(false)
     setConversationToDelete(null)
   }, [])
 
-  const togglePinConversation = useCallback((id: string) => {
-    setConversations(prev => prev.map(conv => {
-      if (conv.id === id) {
-        return {
-          ...conv,
-          pinned: !conv.pinned,
-          pinnedAt: !conv.pinned ? new Date() : undefined
-        }
-      }
-      return conv
-    }))
-  }, [])
+  const handleTogglePinConversation = useCallback((id: string) => {
+    togglePin(id)
+  }, [togglePin])
 
-  const renameConversation = useCallback((id: string, newTitle: string) => {
+  const handleRenameConversation = useCallback((id: string, newTitle: string) => {
     const trimmedTitle = newTitle.trim().slice(0, 50)
     if (trimmedTitle) {
-      setConversations(prev => prev.map(conv => {
-        if (conv.id === id) {
-          return { ...conv, title: trimmedTitle }
-        }
-        return conv
-      }))
+      renameConversation(id, trimmedTitle)
     }
-  }, [])
+  }, [renameConversation])
 
-  const currentConversation = useMemo(() => {
-    return currentConversationId 
-      ? conversations.find(c => c.id === currentConversationId) || null
-      : null
-  }, [currentConversationId, conversations])
+  const handleSelectConversation = useCallback((id: string) => {
+    selectConversation(id)
+  }, [selectConversation])
 
   // 生成唯一ID（兼容移动端HTTP环境）
   const generateId = () => {
@@ -272,20 +148,12 @@ const Home: React.FC = () => {
 
     let targetConversationId = currentConversationId
     if (!targetConversationId) {
-      // 同步创建新对话并获取 ID
-      const newId = Date.now().toString()
-      const newConversation: Conversation = {
-        id: newId,
-        title: '新对话',
-        messages: [],
-        createdAt: new Date()
-      }
-      setConversations(prev => [newConversation, ...prev])
-      setCurrentConversationId(newId)
-      targetConversationId = newId
+      // 没有当前对话时，创建新对话
+      createNewConversation()
+      return messageWithId.id
     }
 
-    let newMessageId: string | undefined;
+    // 将消息添加到当前对话
     setConversations(prev => prev.map(conv => {
       if (conv.id === targetConversationId) {
         const updatedMessages = [...conv.messages, messageWithId]
@@ -294,9 +162,6 @@ const Home: React.FC = () => {
           // AI自动提取标题，不超过10个字
           updatedTitle = message.content.slice(0, 10) + (message.content.length > 10 ? '...' : '')
         }
-        
-        newMessageId = messageWithId.id;
-        
         return {
           ...conv,
           messages: updatedMessages,
@@ -310,32 +175,34 @@ const Home: React.FC = () => {
     if (message.role === 'assistant') {
       setMessageToBroadcast(message.content);
     }
-    
-    return newMessageId;
-  }, [currentConversationId])
+
+    return messageWithId.id
+  }, [currentConversationId, createNewConversation, setConversations])
 
   const contextValue: ChatContextType = useMemo(() => ({
     conversations,
     currentConversationId,
     createNewConversation,
-    selectConversation,
-    deleteConversation,
+    selectConversation: handleSelectConversation,
+    deleteConversation: handleDeleteConversation,
     currentConversation,
     addMessageToCurrentConversation,
-    togglePinConversation,
-    renameConversation,
-    setConversations
+    togglePinConversation: handleTogglePinConversation,
+    renameConversation: handleRenameConversation,
+    setConversations,
+    sendMessage,
   }), [
     conversations,
+    setConversations,
     currentConversationId,
     createNewConversation,
-    selectConversation,
-    deleteConversation,
+    handleSelectConversation,
+    handleDeleteConversation,
     currentConversation,
     addMessageToCurrentConversation,
-    togglePinConversation,
-    renameConversation,
-    setConversations
+    handleTogglePinConversation,
+    handleRenameConversation,
+    sendMessage,
   ])
 
   // 加载中或未登录时显示加载状态

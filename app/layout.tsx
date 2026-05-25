@@ -1,6 +1,14 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
+import Script from 'next/script'
 import { Providers } from '../src/components/Providers'
 import './globals.css'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+}
 
 export const metadata: Metadata = {
   title: 'Yinxin.AGI',
@@ -10,12 +18,6 @@ export const metadata: Metadata = {
     capable: true,
     title: 'Yinxin.AGI',
     statusBarStyle: 'default',
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
   },
 }
 
@@ -33,12 +35,15 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <link rel="apple-touch-icon" href="/icon-192x192.png" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.css" />
-        <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"></script>
       </head>
       <body className="font-sans antialiased h-full">
         <Providers>
           {children}
         </Providers>
+        <Script
+          src="https://cdn.jsdelivr.net/npm/katex@0.16.4/dist/katex.min.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   )

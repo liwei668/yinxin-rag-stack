@@ -233,135 +233,24 @@ const MessageList: React.FC<MessageListProps> = ({
     return segments;
   };
 
-  // 渲染完整内容（处理表格、代码块、普通行）
+  // 渲染完整内容
   const renderContent = (content: string) => {
-    const lines = content.split('\n');
-    const elements: React.ReactNode[] = [];
-    let i = 0;
-    let globalIndex = 0;
-
-    while (i < lines.length) {
-      const line = lines[i];
-      const trimmed = line.trim();
-
-      // 检测块级公式 $$...$$ 或 $$ 开头（多行公式）
-      if (trimmed === '$$' || trimmed.startsWith('$$')) {
-        const formulaLines: string[] = [];
-        // 如果是 $$ 开头且不是结束，提取内容
-        if (trimmed.startsWith('$$') && !trimmed.endsWith('$$')) {
-          formulaLines.push(trimmed.slice(2).trim());
-        } else if (trimmed === '$$') {
-          // 空行，等待下一行
-        }
-        
-        if (trimmed.endsWith('$$') && !trimmed.startsWith('$$')) {
-          // 只有结束的 $$，前面没有开始
-        } else if (trimmed.endsWith('$$') && formulaLines.length === 0) {
-          // 单行 $$...$$
-          const content = trimmed.slice(2, -2).trim();
-          if (content) {
-            elements.push(
-              <div key={globalIndex++} className="my-4 py-3 px-4 bg-gray-50 rounded-lg overflow-x-auto">
-                <div className="flex justify-center">{renderLatex(content, true)}</div>
-              </div>
-            );
-          }
-          i++;
-          continue;
-        }
-        
-        // 收集多行公式
-        if (trimmed === '$$') {
-          i++;
-          while (i < lines.length) {
-            const nextLine = lines[i].trim();
-            if (nextLine === '$$' || nextLine.endsWith('$$')) {
-              if (nextLine !== '$$') {
-                formulaLines.push(nextLine.slice(0, -2).trim());
-              }
-              break;
-            }
-            formulaLines.push(lines[i]);
-            i++;
-          }
-          if (formulaLines.length > 0) {
-            elements.push(
-              <div key={globalIndex++} className="my-4 py-3 px-4 bg-gray-50 rounded-lg overflow-x-auto">
-                <div className="flex justify-center">{renderLatex(formulaLines.join(' '), true)}</div>
-              </div>
-            );
-          }
-          i++;
-          continue;
-        }
-      }
-
-      // 检测代码块 ```
-      if (line.trim().startsWith('```')) {
-        const lang = line.trim().slice(3).trim();
-        const codeLines: string[] = [];
-        i++;
-        while (i < lines.length && !lines[i].trim().startsWith('```')) {
-          codeLines.push(lines[i]);
-          i++;
-        }
-        i++; // 跳过结束的 ```
-        elements.push(
-          <div key={globalIndex++} className="my-3 rounded-lg overflow-hidden border border-gray-200">
-            {lang && <div className="bg-gray-100 px-3 py-1 text-xs text-gray-500 border-b">{lang}</div>}
-            <pre className="bg-gray-900 text-gray-100 p-4 overflow-x-auto text-sm leading-relaxed">
-              <code>{codeLines.join('\n')}</code>
-            </pre>
-          </div>
-        );
-        continue;
-      }
-
-      // 检测 Markdown 表格（| 开头）
-      if (line.trim().startsWith('|') && line.trim().endsWith('|')) {
-        const tableLines: string[] = [];
-        while (i < lines.length && lines[i].trim().startsWith('|') && lines[i].trim().endsWith('|')) {
-          tableLines.push(lines[i].trim());
-          i++;
-        }
-        // 解析表格
-        const rows = tableLines
-          .filter((tl, idx) => !(idx === 1 && /^[\s|:-]+$/.test(tl))) // 跳过分隔行
-          .map(tl => tl.split('|').slice(1, -1).map(cell => cell.trim()));
-
-        if (rows.length > 0) {
-          elements.push(
-            <div key={globalIndex++} className="my-3 overflow-x-auto max-h-96 overflow-y-auto">
-              <table className="min-w-full border border-gray-200 text-sm">
-                <thead>
-                  <tr className="bg-gray-50">
-                    {rows[0].map((cell, ci) => (
-                      <th key={ci} className="px-3 py-2 text-left font-semibold text-gray-700 border-b border-gray-200">{renderInline(cell)}</th>
-                    ))}
-                  </tr>
-                </thead>
-                <tbody>
-                  {rows.slice(1).map((row, ri) => (
-                    <tr key={ri} className="border-b border-gray-100 last:border-0 hover:bg-gray-50">
-                      {row.map((cell, ci) => (
-                        <td key={ci} className="px-3 py-2 text-gray-700">{renderInline(cell)}</td>
-                      ))}
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          );
-        }
-        continue;
-      }
-
-      // 普通行
-      elements.push(renderFormattedLine(line, globalIndex++));
-      i++;
+    if (!content || content.trim() === '') {
+      return <span className="text-gray-400">无内容</span>;
     }
-
-    return elements;
+    
+    // 简单渲染：将换行符转为 <br />
+    const lines = content.split('\n');
+    return (
+      <>
+        {lines.map((line, idx) => (
+          <span key={idx}>
+            {line}
+            {idx < lines.length - 1 && <br />}
+          </span>
+        ))}
+      </>
+    );
   };
 
   const renderFormattedLine = (line: string, index: number) => {
@@ -497,7 +386,7 @@ const MessageList: React.FC<MessageListProps> = ({
                   <div className="mb-2">
                     <span className="text-sm font-semibold text-emerald-700">露丝</span>
                   </div>
-                  <div className="prose prose-emerald max-w-none">
+                  <div className="text-gray-800 leading-relaxed">
                     {renderContent(msg.content)}
                   </div>
                 </div>
@@ -517,7 +406,7 @@ const MessageList: React.FC<MessageListProps> = ({
           {msg.role === 'user' && (
             <div className="flex items-start flex-row-reverse">
               {/* 用户消息气泡 */}
-              <div className="rounded-2xl p-3 md:p-4 rounded-tr-lg">
+              <div className="bg-emerald-500 rounded-2xl p-3 md:p-4 rounded-tr-lg max-w-3xl [&_*]:text-white">
                 <div className="leading-relaxed">
                   {renderContent(msg.content)}
                 </div>
